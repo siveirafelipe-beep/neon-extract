@@ -103,6 +103,38 @@
       cursor: not-allowed;
     }
 
+    /* Main Menu dark arcade blueprint grid background */
+    .menu-grid-bg {
+      background-color: #050814;
+      background-image:
+        linear-gradient(to right, rgba(30, 58, 138, 0.28) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 58, 138, 0.28) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: center center;
+    }
+
+    /* Main Menu rounded neon frame */
+    .menu-title-frame {
+      background: #070b1d;
+      border: 3px solid #0ea5e9;
+      border-radius: 16px;
+      box-shadow:
+        inset 0 0 0 5px #040712,
+        0 12px 28px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Main Menu flat-bevel rounded buttons */
+    .menu-pill-btn {
+      border-radius: 12px;
+      box-shadow: 0 5px 0 #02040a;
+      transition: transform 0.06s steps(2), filter 0.1s;
+      cursor: pointer;
+    }
+    .menu-pill-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #02040a;
+    }
+
     /* Subtle CRT scanline overlay (non-blocking) */
     .crt-scanlines {
       pointer-events: none;
@@ -198,10 +230,10 @@
          ======================================================================= -->
     <div id="hud-overlay" class="hidden fixed top-0 left-0 right-0 z-20 safe-top px-2 sm:px-4 pointer-events-none">
       <div class="max-w-6xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3 bg-[#080c1d]/90 border-2 border-sky-500/80 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded">
-        <!-- Left: Hearts & Floor/Sector Info -->
+        <!-- Left: 8-Bit Pixel Hearts & Floor/Sector Info -->
         <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div id="hud-hearts" class="flex items-center gap-1 text-rose-500 text-xs sm:text-sm shrink-0" aria-label="Lives">
-            ♥ ♥ ♥
+          <div id="hud-hearts" class="flex items-center gap-1 sm:gap-1.5 shrink-0" aria-label="Lives">
+            <!-- Rendered with 8-bit pixel SVG hearts -->
           </div>
           <div class="h-4 w-[2px] bg-slate-700 shrink-0"></div>
           <div class="truncate">
@@ -213,9 +245,19 @@
           </div>
         </div>
 
-        <!-- Center: Machines Objective / Elevator Status -->
+        <!-- Center: 8-Bit Generator Machine Objective / Elevator Status -->
         <div id="hud-objective-box" class="flex items-center gap-1.5 sm:gap-2 px-2 py-1 bg-slate-950/90 border border-amber-400/70 rounded shrink-0">
-          <span class="text-amber-400 text-[10px] sm:text-xs">⚙</span>
+          <svg id="hud-machine-icon" class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+            <rect x="6" y="0" width="4" height="2" fill="#f43f5e" />
+            <rect x="2" y="2" width="12" height="13" fill="#facc15" />
+            <rect x="3" y="3" width="10" height="11" fill="#1e1b4b" />
+            <rect id="hud-machine-screen" x="4" y="4" width="8" height="4" fill="#facc15" />
+            <rect x="5" y="5" width="3" height="2" fill="#ffffff" />
+            <rect x="4" y="10" width="3" height="3" fill="#38bdf8" />
+            <rect x="9" y="10" width="3" height="3" fill="#38bdf8" />
+            <rect x="1" y="5" width="1" height="6" fill="#94a3b8" />
+            <rect x="14" y="5" width="1" height="6" fill="#94a3b8" />
+          </svg>
           <span id="hud-machines" class="text-[10px] sm:text-xs text-amber-300">0/2</span>
         </div>
 
@@ -254,11 +296,11 @@
           </button>
         </div>
       </div>
+    </div>
 
-      <!-- Contextual Interaction Prompt Banner (PC & Mobile feedback) -->
-      <div id="hud-prompt" class="hidden mt-2 mx-auto w-fit max-w-[92vw] px-3 py-1.5 bg-[#090d20]/95 border-2 border-yellow-400 text-yellow-300 text-[9px] sm:text-[11px] text-center rounded shadow-lg">
-        [E] REPARAR MÁQUINA
-      </div>
+    <!-- Bottom Contextual Interaction Prompt Banner (PC & Mobile feedback) -->
+    <div id="hud-prompt" class="hidden fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-fit max-w-[54vw] sm:max-w-md px-3 py-1.5 sm:px-4 sm:py-2 bg-[#090d20]/95 border-2 border-yellow-400 text-yellow-300 text-[8px] sm:text-[11px] text-center leading-snug rounded shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+      [E] REPARAR MÁQUINA
     </div>
 
     <!-- =======================================================================
@@ -295,30 +337,30 @@
     <!-- =======================================================================
          3. MAIN MENU (STRICTLY ONLY: TITLE BANNER, START MATCH, OPTIONS)
          ======================================================================= -->
-    <div id="screen-main-menu" class="fixed inset-0 z-30 flex flex-col items-center justify-center p-4 bg-[#050711]/88">
-      <div class="w-full max-w-lg flex flex-col items-center text-center gap-6 sm:gap-8">
+    <div id="screen-main-menu" class="menu-grid-bg fixed inset-0 z-30 flex flex-col items-center justify-center p-4">
+      <div class="w-full max-w-[540px] flex flex-col items-center text-center gap-6 sm:gap-7">
         <!-- 8-Bit Arcade Title Banner -->
-        <div class="pixel-box w-full p-5 sm:p-7 rounded-lg relative overflow-hidden">
+        <div class="menu-title-frame w-full px-5 py-6 sm:px-8 sm:py-8 relative overflow-hidden">
           <!-- Animated Mini Pac-Man Style Chase Strip inside Banner -->
-          <div class="w-full h-7 mb-3 bg-[#050816] border-2 border-sky-800 relative overflow-hidden flex items-center">
+          <div class="w-full h-7 sm:h-8 mb-4 bg-[#050918] border border-[#0369a1] relative overflow-hidden flex items-center">
             <canvas id="banner-chase-canvas" class="w-full h-full"></canvas>
           </div>
-          <div class="text-[10px] sm:text-xs text-sky-400 tracking-widest mb-2">ARCADE STEALTH SURVIVAL</div>
-          <h1 class="text-xl sm:text-3xl text-yellow-400 leading-snug drop-shadow-[0_4px_0_#b45309]">
+          <div class="text-[9px] sm:text-xs text-[#38bdf8] tracking-[0.14em] mb-3">ARCADE STEALTH SURVIVAL</div>
+          <h1 class="text-xl sm:text-4xl text-[#facc15] tracking-wider leading-tight" style="text-shadow: 0 4px 0 #92400e;">
             NEON EXTRACT
           </h1>
-          <div class="mt-2 inline-block px-2.5 py-1 bg-rose-600 text-white text-[9px] sm:text-[10px]">
+          <div class="mt-4 inline-block px-4 py-1.5 bg-[#e11d48] text-white text-[9px] sm:text-[11px] tracking-wider">
             8-BIT EDITION
           </div>
         </div>
 
         <!-- ONLY TWO BUTTONS ON MAIN MENU AS REQUESTED -->
-        <div class="w-full max-w-xs flex flex-col gap-4">
-          <button id="btn-menu-start" type="button" class="arcade-btn w-full py-4 px-5 bg-emerald-500 text-slate-950 text-xs sm:text-sm rounded-lg hover:bg-emerald-400">
+        <div class="w-full max-w-[310px] sm:max-w-[350px] flex flex-col gap-4 sm:gap-5">
+          <button id="btn-menu-start" type="button" class="menu-pill-btn w-full py-4 px-5 bg-[#10b981] hover:bg-[#34d399] text-[#050711] text-[11px] sm:text-sm">
             ▶ COMEÇAR PARTIDA
           </button>
 
-          <button id="btn-menu-options" type="button" class="arcade-btn w-full py-4 px-5 bg-sky-500 text-slate-950 text-xs sm:text-sm rounded-lg hover:bg-sky-400">
+          <button id="btn-menu-options" type="button" class="menu-pill-btn w-full py-4 px-5 bg-[#0ea5e9] hover:bg-[#38bdf8] text-[#050711] text-[11px] sm:text-sm">
             ⚙ OPÇÕES
           </button>
         </div>
@@ -376,6 +418,19 @@
               <button id="btn-vol-down" type="button" class="arcade-btn px-2.5 py-1.5 bg-slate-800 text-white text-xs rounded">-</button>
               <input id="slider-volume" type="range" min="0" max="100" step="5" value="70" class="retro-slider flex-1" />
               <button id="btn-vol-up" type="button" class="arcade-btn px-2.5 py-1.5 bg-slate-800 text-white text-xs rounded">+</button>
+            </div>
+          </div>
+
+          <!-- Field of View (FOV) Control (+0% to +50% max) -->
+          <div class="bg-slate-950/90 border-2 border-slate-700 p-3 rounded">
+            <div class="flex items-center justify-between mb-2.5">
+              <span id="lbl-opt-fov" class="text-sky-300">CAMPO DE VISÃO</span>
+              <span id="lbl-opt-fov-val" class="text-yellow-400">+0%</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <button id="btn-fov-down" type="button" class="arcade-btn px-2.5 py-1.5 bg-slate-800 text-white text-xs rounded">-</button>
+              <input id="slider-fov" type="range" min="0" max="50" step="5" value="0" class="retro-slider flex-1" />
+              <button id="btn-fov-up" type="button" class="arcade-btn px-2.5 py-1.5 bg-slate-800 text-white text-xs rounded">+</button>
             </div>
           </div>
 
@@ -628,6 +683,7 @@
           deploy: 'INICIAR DESCIDA ▶',
           optTitle: 'OPÇÕES',
           volume: 'VOLUME DO SOM',
+          fovLabel: 'CAMPO DE VISÃO',
           language: 'IDIOMA',
           mobileControls: 'CONTROLES MOBILE',
           fullscreenBtn: '⛶ TELA CHEIA (OCULTAR BARRA)',
@@ -712,6 +768,7 @@
           deploy: 'START DESCENT ▶',
           optTitle: 'OPTIONS',
           volume: 'SOUND VOLUME',
+          fovLabel: 'FIELD OF VIEW',
           language: 'LANGUAGE',
           mobileControls: 'MOBILE CONTROLS',
           fullscreenBtn: '⛶ FULLSCREEN (HIDE BROWSER BAR)',
@@ -800,7 +857,7 @@
           role: { pt: 'ENGENHEIRO', en: 'ENGINEER' },
           color: '#facc15',
           visor: '#38bdf8',
-          stats: { repair: 5, speed: 3, skill: 5, stamina: 2 }, // Sum = 15 (Strong: Repair 5 & Skill 5, Weak: Energy 2)
+          stats: { repair: 5, speed: 3, skill: 5, stamina: 2 },
           passive: {
             pt: '+20% largura nas zonas de Calibração.',
             en: '+20% wider Calibration success zones.'
@@ -820,7 +877,7 @@
           role: { pt: 'CORREDOR', en: 'RUNNER' },
           color: '#f43f5e',
           visor: '#fef08a',
-          stats: { repair: 2, speed: 5, skill: 3, stamina: 5 }, // Sum = 15 (Strong: Speed 5 & Energy 5, Weak: Repair 2)
+          stats: { repair: 2, speed: 5, skill: 3, stamina: 5 },
           passive: {
             pt: '+20% velocidade por 2.5s ao ser visto por drone.',
             en: 'Gains a 2.5s speed burst when spotted by a drone.'
@@ -840,7 +897,7 @@
           role: { pt: 'ESTRATEGISTA', en: 'TACTICIAN' },
           color: '#c084fc',
           visor: '#f472b6',
-          stats: { repair: 3, speed: 4, skill: 5, stamina: 3 }, // Sum = 15 (Strong: Skillcheck 5, Balanced 3-4)
+          stats: { repair: 3, speed: 4, skill: 5, stamina: 3 },
           passive: {
             pt: 'Sexto Sentido: destaca drones próximos através de paredes e escuridão.',
             en: 'Sixth Sense highlights nearby drones through walls and darkness.'
@@ -878,7 +935,7 @@
           patrolMult: 0.80,
           chaseMult: 1.30,
           coneAngleDeg: 45,
-          coneRange: 155, // Shorter 45° cone range, faster movement
+          coneRange: 155,
           bodyColor: '#f43f5e',
           eyeColor: '#ffffff',
           coneColor: 'rgba(244, 63, 94, 0.26)',
@@ -1036,24 +1093,19 @@
           osc.stop(now + duration + 0.01);
         }
 
-        // Distinct map footstep SFX
         playFootstep(mapStepType) {
           if (mapStepType === 'arcade') {
-            // Classic Pac-Man style square blip
             const pitch = Math.random() > 0.5 ? 310 : 260;
             this.playTone(pitch, pitch * 0.75, 0.04, 'square', 0.09);
           } else if (mapStepType === 'foundry') {
-            // Heavy low-frequency metallic thud
             const pitch = 115 + (Math.random() * 18 - 9);
             this.playTone(pitch, 52, 0.065, 'triangle', 0.16);
           } else {
-            // Cryo lab crisp high-pitched ice/tile click
             const pitch = 920 + (Math.random() * 140);
             this.playTone(pitch, 1350, 0.03, 'sine', 0.11);
           }
         }
 
-        // Machine welding / ratchet spark tick
         playRepairSpark() {
           const base = 420 + Math.random() * 380;
           this.playTone(base, base * 0.5, 0.045, 'sawtooth', 0.11);
@@ -1086,7 +1138,6 @@
           this.playTone(520, 980, 0.06, 'sawtooth', 0.16);
         }
 
-        // Loud alarm siren on failed minigame
         playAlarmSiren() {
           for (let i = 0; i < 4; i++) {
             const t = i * 0.14;
@@ -1139,6 +1190,7 @@
       const settings = {
         lang: 'pt',
         volume: 0.7,
+        fovExtra: 0, // 0 to 0.50 (+0% up to +50% field of view)
         touchMode: 'auto', // 'auto' | 'on' | 'off'
         mobileLayout: null
       };
@@ -1150,6 +1202,9 @@
             const parsed = JSON.parse(raw);
             if (parsed.lang === 'pt' || parsed.lang === 'en') settings.lang = parsed.lang;
             if (typeof parsed.volume === 'number') settings.volume = parsed.volume;
+            if (typeof parsed.fovExtra === 'number') {
+              settings.fovExtra = Math.max(0, Math.min(0.5, parsed.fovExtra));
+            }
             if (['auto', 'on', 'off'].includes(parsed.touchMode)) settings.touchMode = parsed.touchMode;
             if (parsed.mobileLayout) settings.mobileLayout = parsed.mobileLayout;
           }
@@ -1172,7 +1227,6 @@
         return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth < 820;
       }
 
-      // Clamp any mobile control strictly inside visible safe bounds
       function clampControlPos(key, x, y) {
         const sizes = { joy: 118, interact: 68, sprint: 60, skill: 60 };
         const sz = sizes[key] || 64;
@@ -1228,6 +1282,9 @@
         document.getElementById('lbl-opt-vol').textContent = t('volume');
         document.getElementById('lbl-opt-vol-val').textContent = `${Math.round(settings.volume * 100)}%`;
         document.getElementById('slider-volume').value = Math.round(settings.volume * 100);
+        document.getElementById('lbl-opt-fov').textContent = t('fovLabel');
+        document.getElementById('lbl-opt-fov-val').textContent = `+${Math.round(settings.fovExtra * 100)}%`;
+        document.getElementById('slider-fov').value = Math.round(settings.fovExtra * 100);
         document.getElementById('lbl-opt-lang').textContent = t('language');
         document.getElementById('lbl-opt-touch').textContent = t('mobileControls');
         document.getElementById('btn-toggle-fullscreen').textContent = t('fullscreenBtn');
@@ -1264,7 +1321,6 @@
         document.getElementById('lbl-st-col-cards').textContent = t('colCards');
         document.getElementById('lbl-st-col-final').textContent = t('colFinal');
 
-        // Language toggle highlight
         const btnPt = document.getElementById('btn-lang-pt');
         const btnEn = document.getElementById('btn-lang-en');
         if (settings.lang === 'pt') {
@@ -1275,7 +1331,6 @@
           btnPt.className = 'arcade-btn px-3 py-1.5 bg-slate-800 text-slate-300 text-[10px] rounded';
         }
 
-        // Touch toggle label
         const touchBtn = document.getElementById('btn-toggle-touch');
         touchBtn.textContent = settings.touchMode === 'auto'
           ? t('touchAuto')
@@ -1292,8 +1347,8 @@
       const TILE_SIZE = 44;
       const BASE_PLAYER_SPEED = 148;
       const BASE_DRONE_SPEED = 142;
-      const ELEVATOR_EXCLUSION_RADIUS = TILE_SIZE * 3.2; // Keeps patrol routes & idle spots away from the elevator
-      const MACHINE_EXCLUSION_RADIUS = TILE_SIZE * 2.2;  // Prevents picking machine tiles as patrol stops without causing U-turn loops
+      const ELEVATOR_EXCLUSION_RADIUS = TILE_SIZE * 3.2;
+      const MACHINE_EXCLUSION_RADIUS = TILE_SIZE * 2.2;
 
       const gameState = {
         mode: 'MENU', // 'MENU' | 'CHAR_SELECT' | 'PLAYING' | 'PAUSED' | 'STATS' | 'MINIGAME' | 'UPGRADE' | 'TRANSITION' | 'GAMEOVER'
@@ -1301,8 +1356,8 @@
         floor: 1,
         totalMachinesRepaired: 0,
         mapTheme: MAP_THEMES[0],
-        grid: [], // 0 = floor, 1 = wall
-        props: [], // decorative 8-bit map props
+        grid: [],
+        props: [],
         cols: 21,
         rows: 17,
         isBlackout: false,
@@ -1316,7 +1371,7 @@
         shakeIntensity: 0,
         bannerMsg: '',
         bannerTimer: 0,
-        camera: { x: 0, y: 0 },
+        camera: { x: 0, y: 0, zoom: 1.8 },
         acquiredUpgrades: [],
         upgrades: {
           speedMult: 1,
@@ -1360,10 +1415,8 @@
       function generateFloorMap(theme) {
         const cols = theme.cols;
         const rows = theme.rows;
-        // Start with solid walls
         const grid = Array.from({ length: rows }, () => Array(cols).fill(1));
 
-        // Carve Pac-Man / stealth rooms & corridors on odd coordinates
         function carveMaze(cx, cy) {
           grid[cy][cx] = 0;
           const dirs = [
@@ -1382,7 +1435,6 @@
 
         carveMaze(1, 1);
 
-        // Add tactical Pac-Man style loops & open chambers so player can outmaneuver drones
         const extraLoops = Math.floor((cols * rows) * 0.085);
         for (let i = 0; i < extraLoops; i++) {
           const rx = 2 + Math.floor(Math.random() * (cols - 4));
@@ -1399,7 +1451,6 @@
           }
         }
 
-        // Carve 2-3 small thematic rooms (2x2 or 3x2)
         const roomCount = theme.id === 'cryo_lab' ? 4 : 2;
         for (let r = 0; r < roomCount; r++) {
           const rw = 2 + Math.floor(Math.random() * 2);
@@ -1413,7 +1464,6 @@
           }
         }
 
-        // Collect all walkable floor tiles
         const walkable = [];
         for (let y = 1; y < rows - 1; y++) {
           for (let x = 1; x < cols - 1; x++) {
@@ -1421,7 +1471,6 @@
           }
         }
 
-        // Generate thematic 8-bit decorative props on select floor edges/corners
         const props = [];
         for (const tile of walkable) {
           if (Math.random() < 0.06) {
@@ -1445,12 +1494,10 @@
       }
 
       function getMachineCount(floor) {
-        // Starts at 2, +1 every floor divisible by 3 (3, 6, 9, 12...) up to cap of 10
         return Math.min(10, 2 + Math.floor(floor / 3));
       }
 
       function getDroneCount(floor) {
-        // Starts at 1, +1 every floor divisible by 3 (3, 6, 9, 12...) up to cap of 6 (and available unique types)
         const scaled = Math.min(6, 1 + Math.floor(floor / 3));
         return Math.min(DRONE_TYPES.length, scaled);
       }
@@ -1462,14 +1509,12 @@
 
       function setupFloor(floorNum) {
         gameState.floor = floorNum;
-        // Cycle/pick distinct map theme each floor
         const themeIdx = (floorNum - 1) % MAP_THEMES.length;
         const theme = MAP_THEMES[themeIdx];
         gameState.mapTheme = theme;
         gameState.cols = theme.cols;
         gameState.rows = theme.rows;
 
-        // Roll Blackout probability
         const blackoutProb = getBlackoutChance(floorNum);
         gameState.isBlackout = (Math.random() * 100) < blackoutProb;
 
@@ -1477,10 +1522,8 @@
         gameState.grid = grid;
         gameState.props = props;
 
-        // Shuffle walkable tiles for spawn placement
         const shuffled = [...walkable].sort(() => Math.random() - 0.5);
 
-        // Place Elevator & Player spawn at the Elevator
         const elevTile = shuffled.pop();
         gameState.elevator = {
           tx: elevTile.tx,
@@ -1502,13 +1545,11 @@
         p.overclockTimer = 0;
         p.infiniteStaminaTimer = 0;
 
-        // Compute character + upgrade max stamina
-        const baseStam = 70 + charDef.stats.stamina * 13; // 2★ -> 96, 5★ -> 135
+        const baseStam = 70 + charDef.stats.stamina * 13;
         p.maxStamina = Math.round(baseStam * gameState.upgrades.staminaMaxMult);
         p.stamina = p.maxStamina;
         p.exhausted = false;
 
-        // Spawn Machines randomly away from elevator and each other
         const machineTarget = getMachineCount(floorNum);
         gameState.machines = [];
         for (let i = 0; i < machineTarget; i++) {
@@ -1532,14 +1573,13 @@
               ty: chosen.ty,
               x: (chosen.tx + 0.5) * TILE_SIZE,
               y: (chosen.ty + 0.5) * TILE_SIZE,
-              progress: 0, // 0 to 100
+              progress: 0,
               completed: false,
               sparkFlash: 0
             });
           }
         }
 
-        // Spawn Unique Drones (Never duplicate drone types on the same floor!)
         const droneCount = getDroneCount(floorNum);
         const availableTypes = [...DRONE_TYPES].sort(() => Math.random() - 0.5).slice(0, droneCount);
         gameState.drones = [];
@@ -1565,8 +1605,10 @@
               y: (spawnTile.ty + 0.5) * TILE_SIZE,
               angle: Math.random() * Math.PI * 2,
               targetAngle: 0,
-              state: 'PATROL', // 'PATROL' | 'CHASE' | 'INVESTIGATE' | 'STUNNED' | 'DISABLED'
+              state: 'PATROL',
               stateTimer: 0,
+              lostSightTimer: 0,
+              lastKnownPlayerPos: null,
               waypoint: null,
               path: [],
               recentTiles: [],
@@ -1588,6 +1630,7 @@
         gameState.particles = [];
         gameState.floatingTexts = [];
         gameState.empWaves = [];
+        updateCamera(0, true);
         updateHud();
       }
 
@@ -1639,7 +1682,6 @@
         }
       }
 
-      // Weighted grid pathfinder so drones navigate corridors around walls and avoid camping objectives
       function findGridPath(startX, startY, goalX, goalY, avoidObjectives = true) {
         const cols = gameState.cols;
         const rows = gameState.rows;
@@ -1648,7 +1690,6 @@
         let goalTx = Math.max(1, Math.min(cols - 2, Math.floor(goalX / TILE_SIZE)));
         let goalTy = Math.max(1, Math.min(rows - 2, Math.floor(goalY / TILE_SIZE)));
 
-        // Snap goal to nearest walkable tile if needed
         if (isWallTile(goalTx, goalTy)) {
           let bestDist = Infinity;
           for (let ty = 1; ty < rows - 1; ty++) {
@@ -1669,7 +1710,6 @@
           return [{ x: (goalTx + 0.5) * TILE_SIZE, y: (goalTy + 0.5) * TILE_SIZE, tx: goalTx, ty: goalTy }];
         }
 
-        // Precompute tile traversal weights (gently bias paths away from elevator without blocking corridor traversal)
         const tileCost = Array.from({ length: rows }, () => Array(cols).fill(1));
         if (avoidObjectives) {
           for (let ty = 1; ty < rows - 1; ty++) {
@@ -1728,7 +1768,6 @@
         return path;
       }
 
-      // Cast a single ray from (x, y) at angle up to maxDist; returns hit coordinates
       function castRay(x, y, angle, maxDist) {
         const step = 6;
         const cos = Math.cos(angle);
@@ -1763,7 +1802,6 @@
         const halfConeRad = (drone.type.coneAngleDeg * 0.5) * (Math.PI / 180);
         if (diff > halfConeRad) return false;
 
-        // Check wall occlusion along line of sight
         const hit = castRay(drone.x, drone.y, angleToPlayer, dist);
         return hit.dist >= dist - 8;
       }
@@ -1775,8 +1813,8 @@
       const mobileInput = {
         joyActive: false,
         joyTouchId: null,
-        joyX: 0, // -1 to 1
-        joyY: 0, // -1 to 1
+        joyX: 0,
+        joyY: 0,
         sprintHeld: false
       };
 
@@ -1829,7 +1867,6 @@
         keys[e.code] = false;
       });
 
-      // Virtual Analog Joystick Touch & Mouse Handlers
       const joyContainer = document.getElementById('joy-container');
       const joyKnob = document.getElementById('joy-knob');
 
@@ -1850,7 +1887,6 @@
 
         joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
 
-        // Deadzone of 12%
         const normDist = dist / maxRadius;
         if (normDist < 0.12) {
           mobileInput.joyX = 0;
@@ -1899,7 +1935,6 @@
         }
       });
 
-      // Allow mouse dragging joystick when testing mobile mode on desktop
       joyContainer.addEventListener('mousedown', (e) => {
         e.preventDefault();
         audio.ensureContext();
@@ -1917,7 +1952,6 @@
         }
       });
 
-      // Mobile Action Buttons
       const btnMobInteract = document.getElementById('btn-mobile-interact');
       const btnMobSprint = document.getElementById('btn-mobile-sprint');
       const btnMobSkill = document.getElementById('btn-mobile-skill');
@@ -1982,14 +2016,12 @@
         if (gameState.mode !== 'PLAYING') return;
         const p = gameState.player;
 
-        // If already repairing, pressing E again stops repairing
         if (p.repairingMachineId) {
           audio.playUiClick();
           cancelRepair();
           return;
         }
 
-        // Check open elevator first
         if (gameState.elevator.open) {
           const distElev = Math.hypot(p.x - gameState.elevator.x, p.y - gameState.elevator.y);
           if (distElev <= 56) {
@@ -1999,7 +2031,6 @@
           }
         }
 
-        // Check nearest uncompleted machine
         const mach = getNearestMachine(58);
         if (mach && !mach.completed) {
           audio.playUiClick();
@@ -2018,7 +2049,6 @@
         if (!charDef) return;
 
         if (charDef.id === 'volt') {
-          // Overclock: boosts repair speed by +40% for 6s
           p.skillCooldown = charDef.active.cooldown;
           p.overclockTimer = 6.0;
           audio.playAbility();
@@ -2026,7 +2056,6 @@
           spawnSparkBurst(target ? target.x : p.x, target ? target.y : p.y, 18, '#38bdf8');
           showBanner(t('overclockBanner'), 2.2);
         } else if (charDef.id === 'dash') {
-          // Sprint Burst: instant speed surge with zero stamina cost for 4s
           p.skillCooldown = charDef.active.cooldown;
           audio.playAbility();
           p.stamina = Math.min(p.maxStamina, p.stamina + p.maxStamina * 0.35);
@@ -2037,7 +2066,6 @@
           spawnSparkBurst(p.x, p.y, 16, '#f43f5e');
           showBanner(t('burstBanner'), 2.2);
         } else if (charDef.id === 'aura') {
-          // EMP Pulse: stuns drones within 190px for 3.5s
           p.skillCooldown = charDef.active.cooldown;
           audio.playAbility();
           gameState.empWaves.push({ x: p.x, y: p.y, radius: 12, maxRadius: 195, alpha: 1 });
@@ -2066,12 +2094,10 @@
           spawnSparkBurst(machine.x, machine.y, 24, '#22c55e');
           audio.playMinigameSuccess(true);
 
-          // Check if all machines are completed
           if (gameState.machines.every(m => m.completed)) {
             gameState.elevator.open = true;
             audio.playElevatorOpen();
             showBanner(t('panicBanner'), 3.4);
-            // Send non-chasing drones AWAY from the elevator so they never camp the exit
             for (const d of gameState.drones) {
               if (d.state !== 'CHASE') {
                 d.state = 'PATROL';
@@ -2084,7 +2110,6 @@
       }
 
       function alertNearbyDrones(originX, originY, radius = 440) {
-        // Never lure non-chasing drones into the elevator exclusion zone
         if (Math.hypot(originX - gameState.elevator.x, originY - gameState.elevator.y) < ELEVATOR_EXCLUSION_RADIUS) {
           return;
         }
@@ -2106,12 +2131,11 @@
          ======================================================================= */
       const minigameState = {
         active: false,
-        type: 'calibration', // 'calibration' | 'valve' | 'wires'
+        type: 'calibration',
         machine: null,
         elapsed: 0,
         maxTime: 10,
         fastBonusTime: 4.0,
-        // Calibration specifics
         needleAngle: 0,
         needleDir: 1,
         needleSpeed: 3.1,
@@ -2119,12 +2143,10 @@
         greenEnd: 0.9,
         goldStart: 0.52,
         goldEnd: 0.68,
-        // Valve specifics
         valveAngle: 0,
-        valveProgress: 0, // 0 to 100
+        valveProgress: 0,
         valveGainPerRad: 4.0,
         lastPointerAngle: null,
-        // Wires specifics (up to 5 colors for 1-pt skillcheck)
         wireCount: 4,
         wireColors: ['#ef4444', '#3b82f6', '#facc15', '#22c55e', '#d946ef'],
         rightOrder: [2, 0, 3, 1],
@@ -2166,8 +2188,7 @@
           btnEl.textContent = t('mgCalibBtn');
           btnEl.classList.remove('hidden');
 
-          // Higher skillcheck = wider target zones; lower skillcheck = narrower target zones
-          const skillZoneScale = 0.325 + skillPts * 0.225; // 1pt->0.55x, 3pt->1.00x, 5pt->1.45x
+          const skillZoneScale = 0.325 + skillPts * 0.225;
           const passiveScale = charDef.id === 'volt' ? 1.20 : 1.0;
           const totalZoneScale = skillZoneScale * passiveScale;
 
@@ -2195,8 +2216,6 @@
           minigameState.valveAngle = 0;
           minigameState.valveProgress = 0;
           minigameState.lastPointerAngle = null;
-          // Multiple clockwise rotations required; higher skillcheck fills faster per turn
-          // 1pt -> ~5.7 turns, 3pt -> ~4.0 turns, 5pt -> ~3.1 turns
           minigameState.valveGainPerRad = 2.2 + skillPts * 0.6;
         } else if (chosen === 'wires') {
           titleEl.textContent = t('mgWiresTitle');
@@ -2204,7 +2223,6 @@
           btnEl.textContent = t('mgWiresBtn');
           btnEl.classList.remove('hidden');
 
-          // 1pt -> 5 wires, 3pt -> 4 wires, 5pt -> 3 wires
           const wireCount = Math.max(3, Math.min(5, Math.floor(5.5 - skillPts * 0.5)));
           minigameState.wireCount = wireCount;
           minigameState.maxTime = 15.0;
@@ -2230,7 +2248,6 @@
       function resolveMinigameSuccess(fullBonus) {
         const mach = minigameState.machine;
         const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
-        // Skillcheck bonus formula: 10% + 2.5% * skillcheck points (halved on partial/slow success), rounded to integer
         const baseFullBonus = 10 + 2.5 * charDef.stats.skill;
         const rawBonus = (fullBonus ? baseFullBonus : baseFullBonus * 0.5) * gameState.upgrades.skillBonusMult;
         const totalBonus = Math.round(rawBonus);
@@ -2275,7 +2292,6 @@
             resolveMinigameFailure();
           }
         } else if (minigameState.type === 'valve') {
-          // Accessibility tap boost scaled by skillcheck
           const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
           const tapGain = 3.5 + charDef.stats.skill * 1.1;
           minigameState.valveAngle += 0.45;
@@ -2287,7 +2303,6 @@
         }
       }
 
-      // Minigame Canvas Pointer Interaction (Calibration tap, Valve clockwise drag, Wires drag)
       function getMgCanvasPos(clientX, clientY) {
         const rect = mgCanvas.getBoundingClientRect();
         return {
@@ -2335,7 +2350,6 @@
           let delta = normalizeAngle(curAngle - minigameState.lastPointerAngle);
           minigameState.lastPointerAngle = curAngle;
 
-          // Only reward clockwise rotation (delta > 0), scaled by skillcheck
           if (delta > 0.01 && delta < 1.2) {
             minigameState.valveAngle += delta;
             const prevStep = Math.floor(minigameState.valveProgress / 12);
@@ -2412,7 +2426,6 @@
         const h = mgCanvas.height;
         mgCtx.clearRect(0, 0, w, h);
 
-        // Retro grid background
         mgCtx.fillStyle = '#060918';
         mgCtx.fillRect(0, 0, w, h);
         mgCtx.strokeStyle = 'rgba(56, 189, 248, 0.1)';
@@ -2429,26 +2442,22 @@
           const cy = h * 0.76;
           const radius = Math.min(w, h) * 0.48;
 
-          // Base dark gauge arc (PI to 2*PI)
           mgCtx.lineWidth = 24;
           mgCtx.strokeStyle = '#1e293b';
           mgCtx.beginPath();
           mgCtx.arc(cx, cy, radius, Math.PI, Math.PI * 2);
           mgCtx.stroke();
 
-          // Green zone (50% bonus)
           mgCtx.strokeStyle = '#22c55e';
           mgCtx.beginPath();
           mgCtx.arc(cx, cy, radius, Math.PI + minigameState.greenStart, Math.PI + minigameState.greenEnd);
           mgCtx.stroke();
 
-          // Yellow/Gold zone (100% bonus)
           mgCtx.strokeStyle = '#facc15';
           mgCtx.beginPath();
           mgCtx.arc(cx, cy, radius, Math.PI + minigameState.goldStart, Math.PI + minigameState.goldEnd);
           mgCtx.stroke();
 
-          // Sweeping Needle
           const na = Math.PI + minigameState.needleAngle;
           mgCtx.strokeStyle = '#ffffff';
           mgCtx.lineWidth = 5;
@@ -2457,7 +2466,6 @@
           mgCtx.lineTo(cx + Math.cos(na) * (radius + 16), cy + Math.sin(na) * (radius + 16));
           mgCtx.stroke();
 
-          // Hub cap
           mgCtx.fillStyle = '#38bdf8';
           mgCtx.fillRect(cx - 10, cy - 10, 20, 20);
         } else if (minigameState.type === 'valve') {
@@ -2465,7 +2473,6 @@
           const cy = h * 0.56;
           const r = Math.min(w, h) * 0.28;
 
-          // Top Progress Bar
           const barW = w * 0.76;
           const barX = (w - barW) / 2;
           mgCtx.fillStyle = '#1e293b';
@@ -2473,13 +2480,11 @@
           mgCtx.fillStyle = minigameState.elapsed <= minigameState.fastBonusTime ? '#facc15' : '#22c55e';
           mgCtx.fillRect(barX + 2, 16, (barW - 4) * (minigameState.valveProgress / 100), 14);
 
-          // Progress percentage readout
           mgCtx.fillStyle = '#ffffff';
           mgCtx.font = '9px "Press Start 2P", monospace';
           mgCtx.textAlign = 'center';
           mgCtx.fillText(`${Math.floor(minigameState.valveProgress)}%`, cx, 27);
 
-          // Rotating 8-bit Valve Wheel
           mgCtx.save();
           mgCtx.translate(cx, cy);
           mgCtx.rotate(minigameState.valveAngle);
@@ -2490,7 +2495,6 @@
           mgCtx.arc(0, 0, r, 0, Math.PI * 2);
           mgCtx.stroke();
 
-          // 4 Spokes
           mgCtx.lineWidth = 8;
           for (let s = 0; s < 4; s++) {
             const sa = (s * Math.PI) / 2;
@@ -2500,12 +2504,10 @@
             mgCtx.stroke();
           }
 
-          // Marker dot on rim so rotation is unmistakable
           mgCtx.fillStyle = '#facc15';
           mgCtx.fillRect(r - 7, -7, 14, 14);
           mgCtx.restore();
 
-          // Clockwise indicator arrow
           mgCtx.fillStyle = '#38bdf8';
           mgCtx.font = '12px "Press Start 2P", monospace';
           mgCtx.textAlign = 'center';
@@ -2519,21 +2521,18 @@
             const ly = getWireTerminalY(i, count, h);
             const col = minigameState.wireColors[i];
 
-            // Left Terminal
             mgCtx.fillStyle = col;
             mgCtx.fillRect(lx - 18, ly - 10, 36, 20);
             mgCtx.strokeStyle = '#ffffff';
             mgCtx.lineWidth = 2;
             mgCtx.strokeRect(lx - 18, ly - 10, 36, 20);
 
-            // Right Terminal
             const rColorIdx = minigameState.rightOrder[i];
             const ry = getWireTerminalY(i, count, h);
             mgCtx.fillStyle = minigameState.wireColors[rColorIdx];
             mgCtx.fillRect(rx - 18, ry - 10, 36, 20);
             mgCtx.strokeRect(rx - 18, ry - 10, 36, 20);
 
-            // Draw completed wire
             if (minigameState.connected[i]) {
               const targetRightSlot = minigameState.rightOrder.indexOf(i);
               const targetY = getWireTerminalY(targetRightSlot, count, h);
@@ -2546,7 +2545,6 @@
             }
           }
 
-          // Active Dragging Wire
           if (minigameState.draggingWireIdx >= 0) {
             const idx = minigameState.draggingWireIdx;
             const sy = getWireTerminalY(idx, count, h);
@@ -2574,11 +2572,17 @@
 
       function presentUpgradeSelection() {
         gameState.mode = 'UPGRADE';
+        refreshMobileControlsVisibility();
+
         const screen = document.getElementById('screen-upgrades');
         const grid = document.getElementById('upgrade-cards-grid');
+        const subEl = document.getElementById('lbl-upg-sub');
         grid.innerHTML = '';
 
-        // Pick 3 random distinct upgrades (all <= 10%)
+        const fStr = String(gameState.floor).padStart(2, '0');
+        subEl.textContent = `${t('floor')} ${fStr} • ${t('upgSub')}`;
+
+        const openedAt = performance.now();
         const choices = [...UPGRADE_POOL].sort(() => Math.random() - 0.5).slice(0, 3);
 
         choices.forEach((upg) => {
@@ -2590,7 +2594,11 @@
             <div class="text-xs sm:text-sm text-yellow-400">${upg.title[settings.lang]}</div>
             <div class="text-[10px] sm:text-xs text-emerald-300 leading-relaxed">${upg.desc[settings.lang]}</div>
           `;
-          card.addEventListener('click', () => {
+          card.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (performance.now() - openedAt < 380) return;
+
             audio.playMinigameSuccess(true);
             gameState.upgrades[upg.stat] += upg.amount;
             gameState.acquiredUpgrades.push({
@@ -2607,151 +2615,162 @@
         screen.classList.remove('hidden');
       }
 
-      function playElevatorTransition(nextFloor) {
+      function playElevatorTransition(nextFloorNum) {
         gameState.mode = 'TRANSITION';
+        refreshMobileControlsVisibility();
+
         const overlay = document.getElementById('elevator-transition');
-        const doorL = document.getElementById('door-left');
-        const doorR = document.getElementById('door-right');
+        const doorLeft = document.getElementById('door-left');
+        const doorRight = document.getElementById('door-right');
         const readout = document.getElementById('transition-readout');
         const floorNumEl = document.getElementById('trans-floor-num');
         const mapNameEl = document.getElementById('trans-map-name');
         const blackoutWarnEl = document.getElementById('trans-blackout-warn');
 
         overlay.classList.remove('hidden');
-        readout.style.opacity = '0';
-        blackoutWarnEl.classList.add('hidden');
-
-        // Slide blast doors shut
         requestAnimationFrame(() => {
-          doorL.style.transform = 'translateX(0%)';
-          doorR.style.transform = 'translateX(0%)';
+          doorLeft.classList.remove('-translate-x-full');
+          doorRight.classList.remove('translate-x-full');
         });
 
-        audio.playTone(140, 80, 0.35, 'triangle', 0.25);
-
         setTimeout(() => {
-          // Prepare next floor behind closed doors
-          setupFloor(nextFloor);
-          const fStr = String(nextFloor).padStart(2, '0');
-          floorNumEl.textContent = `${t('floor')} ${fStr}`;
+          setupFloor(nextFloorNum);
+          floorNumEl.textContent = `${t('floor')} ${String(nextFloorNum).padStart(2, '0')}`;
           mapNameEl.textContent = gameState.mapTheme.name[settings.lang];
+          blackoutWarnEl.classList.toggle('hidden', !gameState.isBlackout);
+          readout.classList.remove('opacity-0');
 
           if (gameState.isBlackout) {
-            blackoutWarnEl.classList.remove('hidden');
             audio.playBlackoutPowerDown();
           } else {
-            audio.playElevatorOpen();
+            audio.playUiClick();
           }
-
-          readout.style.opacity = '1';
-        }, 550);
+        }, 520);
 
         setTimeout(() => {
-          readout.style.opacity = '0';
-          doorL.style.transform = 'translateX(-100%)';
-          doorR.style.transform = 'translateX(100%)';
-        }, 2150);
+          readout.classList.add('opacity-0');
+          doorLeft.classList.add('-translate-x-full');
+          doorRight.classList.add('translate-x-full');
+        }, 1750);
 
         setTimeout(() => {
           overlay.classList.add('hidden');
           gameState.mode = 'PLAYING';
-        }, 2700);
+          refreshMobileControlsVisibility();
+        }, 2300);
       }
 
       /* =======================================================================
-         17. PARTICLES & FLOATING TEXT HELPERS
+         17. PARTICLES & FLOATING COMBAT/REPAIR TEXT
          ======================================================================= */
-      function spawnSparkBurst(x, y, count, color) {
+      function spawnSparkBurst(x, y, count = 8, color = '#facc15') {
         for (let i = 0; i < count; i++) {
           const ang = Math.random() * Math.PI * 2;
-          const spd = 40 + Math.random() * 130;
+          const spd = 45 + Math.random() * 110;
           gameState.particles.push({
             x,
             y,
             vx: Math.cos(ang) * spd,
-            vy: Math.sin(ang) * spd - 35,
-            life: 0.28 + Math.random() * 0.32,
-            maxLife: 0.6,
+            vy: Math.sin(ang) * spd,
+            life: 0.28 + Math.random() * 0.25,
+            maxLife: 0.53,
             size: 3 + Math.floor(Math.random() * 3),
             color
           });
         }
       }
 
-      function addFloatingText(x, y, text, color) {
+      function addFloatingText(x, y, text, color = '#ffffff') {
         gameState.floatingTexts.push({
           x,
           y,
           text,
           color,
-          life: 1.1
+          life: 1.05
         });
       }
 
       /* =======================================================================
-         18. MAIN SIMULATION UPDATE LOOP (PLAYER, DRONES, AI, PARTICLES)
+         18. CORE SIMULATION UPDATE LOOP
          ======================================================================= */
       function updateSimulation(dt) {
-        if (gameState.mode !== 'PLAYING' && gameState.mode !== 'MINIGAME') return;
+        if (gameState.shakeTime > 0) {
+          gameState.shakeTime = Math.max(0, gameState.shakeTime - dt);
+        }
+        if (gameState.bannerTimer > 0) {
+          gameState.bannerTimer = Math.max(0, gameState.bannerTimer - dt);
+        }
+
+        for (let i = gameState.particles.length - 1; i >= 0; i--) {
+          const pt = gameState.particles[i];
+          pt.x += pt.vx * dt;
+          pt.y += pt.vy * dt;
+          pt.life -= dt;
+          if (pt.life <= 0) gameState.particles.splice(i, 1);
+        }
+        for (let i = gameState.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = gameState.floatingTexts[i];
+          ft.y -= 26 * dt;
+          ft.life -= dt;
+          if (ft.life <= 0) gameState.floatingTexts.splice(i, 1);
+        }
+        for (let i = gameState.empWaves.length - 1; i >= 0; i--) {
+          const ew = gameState.empWaves[i];
+          ew.radius += 340 * dt;
+          ew.alpha -= 1.6 * dt;
+          if (ew.alpha <= 0) gameState.empWaves.splice(i, 1);
+        }
+
+        if (gameState.mode === 'MINIGAME') {
+          updateMinigame(dt);
+          return;
+        }
+        if (gameState.mode !== 'PLAYING') return;
 
         const p = gameState.player;
         const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
 
-        if (gameState.shakeTime > 0) gameState.shakeTime = Math.max(0, gameState.shakeTime - dt);
-        if (gameState.bannerTimer > 0) gameState.bannerTimer = Math.max(0, gameState.bannerTimer - dt);
         if (p.invulnTimer > 0) p.invulnTimer = Math.max(0, p.invulnTimer - dt);
         if (p.skillCooldown > 0) p.skillCooldown = Math.max(0, p.skillCooldown - dt);
         if (p.speedBuffTimer > 0) {
           p.speedBuffTimer = Math.max(0, p.speedBuffTimer - dt);
           if (p.speedBuffTimer === 0) p.speedBuffMult = 1;
         }
-        if (p.overclockTimer > 0) {
-          p.overclockTimer = Math.max(0, p.overclockTimer - dt);
-        }
-        if (p.infiniteStaminaTimer > 0) {
-          p.infiniteStaminaTimer = Math.max(0, p.infiniteStaminaTimer - dt);
-        }
+        if (p.overclockTimer > 0) p.overclockTimer = Math.max(0, p.overclockTimer - dt);
+        if (p.infiniteStaminaTimer > 0) p.infiniteStaminaTimer = Math.max(0, p.infiniteStaminaTimer - dt);
 
-        // Update EMP rings
-        for (let i = gameState.empWaves.length - 1; i >= 0; i--) {
-          const w = gameState.empWaves[i];
-          w.radius += 360 * dt;
-          w.alpha -= 1.6 * dt;
-          if (w.alpha <= 0) gameState.empWaves.splice(i, 1);
-        }
+        // 1. Movement Input Vector (Keyboard + Analog Joystick)
+        let ix = 0;
+        let iy = 0;
+        if (keys['KeyW'] || keys['ArrowUp']) iy -= 1;
+        if (keys['KeyS'] || keys['ArrowDown']) iy += 1;
+        if (keys['KeyA'] || keys['ArrowLeft']) ix -= 1;
+        if (keys['KeyD'] || keys['ArrowRight']) ix += 1;
 
-        // Player movement (only when not locked in minigame)
-        let moveX = 0;
-        let moveY = 0;
-        if (gameState.mode === 'PLAYING') {
-          if (keys['KeyW'] || keys['ArrowUp']) moveY -= 1;
-          if (keys['KeyS'] || keys['ArrowDown']) moveY += 1;
-          if (keys['KeyA'] || keys['ArrowLeft']) moveX -= 1;
-          if (keys['KeyD'] || keys['ArrowRight']) moveX += 1;
-
-          if (Math.abs(mobileInput.joyX) > 0.01 || Math.abs(mobileInput.joyY) > 0.01) {
-            moveX = mobileInput.joyX;
-            moveY = mobileInput.joyY;
+        if (Math.abs(mobileInput.joyX) > 0.01 || Math.abs(mobileInput.joyY) > 0.01) {
+          ix = mobileInput.joyX;
+          iy = mobileInput.joyY;
+        } else {
+          const len = Math.hypot(ix, iy);
+          if (len > 1) {
+            ix /= len;
+            iy /= len;
           }
         }
 
-        const inputMag = Math.hypot(moveX, moveY);
-        if (inputMag > 1) {
-          moveX /= inputMag;
-          moveY /= inputMag;
-        }
+        const isMoving = Math.hypot(ix, iy) > 0.08;
 
         // Moving cancels active repair
-        if (inputMag > 0.15 && p.repairingMachineId) {
+        if (isMoving && p.repairingMachineId) {
           cancelRepair();
         }
 
-        // Sprint & Stamina logic
-        const wantsSprint = (keys['ShiftLeft'] || keys['ShiftRight'] || mobileInput.sprintHeld) && inputMag > 0.15;
-        if (wantsSprint && !p.exhausted && (p.stamina > 0 || p.infiniteStaminaTimer > 0)) {
+        // 2. Stamina & Sprinting
+        const wantsSprint = (keys['ShiftLeft'] || keys['ShiftRight'] || mobileInput.sprintHeld) && isMoving && !p.repairingMachineId;
+        if (wantsSprint && !p.exhausted && p.stamina > 0) {
           p.isSprinting = true;
           if (p.infiniteStaminaTimer <= 0) {
-            p.stamina = Math.max(0, p.stamina - 28 * dt);
+            p.stamina = Math.max(0, p.stamina - 27 * dt);
             if (p.stamina <= 0) {
               p.exhausted = true;
               p.isSprinting = false;
@@ -2759,385 +2778,348 @@
           }
         } else {
           p.isSprinting = false;
-          const baseRegen = 14 + charDef.stats.stamina * 2.2;
-          p.stamina = Math.min(p.maxStamina, p.stamina + baseRegen * gameState.upgrades.staminaRegenMult * dt);
-          if (p.exhausted && p.stamina >= p.maxStamina * 0.3) {
+          const regenRate = (14 + charDef.stats.stamina * 3.2) * gameState.upgrades.staminaRegenMult;
+          p.stamina = Math.min(p.maxStamina, p.stamina + regenRate * dt);
+          if (p.exhausted && p.stamina >= p.maxStamina * 0.35) {
             p.exhausted = false;
           }
         }
 
-        // Compute effective movement speed
-        const charSpeedFactor = 0.84 + charDef.stats.speed * 0.072; // 2★ -> 0.984, 5★ -> 1.20
-        const sprintFactor = p.isSprinting ? 1.42 : 1.0;
-        const speed = BASE_PLAYER_SPEED * charSpeedFactor * sprintFactor * gameState.upgrades.speedMult * p.speedBuffMult;
+        // 3. Apply Player Velocity & Map-Specific Footstep Audio
+        if (isMoving && !p.repairingMachineId) {
+          const statSpeedMult = 0.84 + charDef.stats.speed * 0.065;
+          const sprintMult = p.isSprinting ? 1.48 : 1.0;
+          const finalSpeed = BASE_PLAYER_SPEED * statSpeedMult * sprintMult * gameState.upgrades.speedMult * p.speedBuffMult;
 
-        if (inputMag > 0.05 && gameState.mode === 'PLAYING') {
-          p.dirX = moveX;
-          p.dirY = moveY;
-          moveWithSlide(p, moveX * speed * dt, moveY * speed * dt);
-
+          moveWithSlide(p, ix * finalSpeed * dt, iy * finalSpeed * dt);
+          p.dirX = ix;
+          p.dirY = iy;
           p.animFrame += dt * (p.isSprinting ? 13 : 8);
-          p.stepAccum += speed * dt;
-          const stepStride = p.isSprinting ? 52 : 64;
-          if (p.stepAccum >= stepStride) {
+
+          p.stepAccum += finalSpeed * dt;
+          if (p.stepAccum >= 44) {
             p.stepAccum = 0;
             audio.playFootstep(gameState.mapTheme.stepType);
           }
         }
 
-        // Active Machine Repairing (+100% longer base repair duration: ~22-26s)
+        // 4. Active Machine Repair Progression, Sparks & 33% Minigame Trigger
         if (p.repairingMachineId) {
           const mach = gameState.machines.find(m => m.id === p.repairingMachineId);
-          if (!mach || mach.completed || Math.hypot(p.x - mach.x, p.y - mach.y) > 68) {
+          if (!mach || mach.completed || Math.hypot(p.x - mach.x, p.y - mach.y) > 64) {
             cancelRepair();
           } else {
-            // 2★ Repair -> 0.77x (~25.2s), 3★ -> 0.835x (~23.2s), 5★ -> 0.965x (~20.1s)
-            const charRepairFactor = 0.64 + charDef.stats.repair * 0.065;
-            const overclockMult = p.overclockTimer > 0 ? 1.40 : 1.0;
-            const repairRate = 5.15 * charRepairFactor * overclockMult * gameState.upgrades.repairMult;
-            addMachineProgress(mach, repairRate * dt);
+            const overclockBonus = p.overclockTimer > 0 ? 1.4 : 1.0;
+            const baseRate = (2.6 + charDef.stats.repair * 0.45) * gameState.upgrades.repairMult * overclockBonus;
+            addMachineProgress(mach, baseRate * dt);
 
-            // Welding Sparks & Audio Feedback
             p.sparkTimer += dt;
-            if (p.sparkTimer >= 0.22) {
+            if (p.sparkTimer >= 0.24) {
               p.sparkTimer = 0;
-              spawnSparkBurst(mach.x, mach.y - 6, 4, Math.random() > 0.4 ? '#facc15' : '#fb923c');
+              spawnSparkBurst(mach.x + (Math.random() * 14 - 7), mach.y - 4, 3, '#facc15');
               audio.playRepairSpark();
             }
 
-            // Every 2.2 seconds of active repairing, 33% chance to trigger a minigame (~1.5x more frequent)
-            if (gameState.mode === 'PLAYING' && !mach.completed) {
-              p.repairTimer += dt;
-              if (p.repairTimer >= 2.2) {
-                p.repairTimer = 0;
-                if (Math.random() < 0.33) {
-                  startRandomMinigame(mach);
-                }
+            // 33% chance every 2.2s while repairing to trigger a skillcheck minigame
+            p.repairTimer += dt;
+            if (p.repairTimer >= 2.2 && !mach.completed && mach.progress < 94) {
+              p.repairTimer = 0;
+              if (Math.random() < 0.33) {
+                startRandomMinigame(mach);
               }
             }
           }
         }
 
-        // Update Drones AI & 45° Vision Cones
+        // 5. Drones AI: 45° Vision Cone, 2s Post-Sight Chase, 3s Post-Hit Deactivation
         for (const d of gameState.drones) {
+          d.animPhase += dt * 7;
+
           if (d.disabledTimer > 0) {
             d.disabledTimer = Math.max(0, d.disabledTimer - dt);
             d.state = 'DISABLED';
             if (d.disabledTimer === 0) {
               d.state = 'PATROL';
+              d.lostSightTimer = 0;
               assignNewDronePatrolRoute(d, true);
             }
             continue;
           }
 
-          d.animPhase += dt * 7;
-
           if (d.stunTimer > 0) {
             d.stunTimer = Math.max(0, d.stunTimer - dt);
-            d.angle += dt * 4;
-            if (d.stunTimer === 0) d.state = 'PATROL';
+            d.state = 'STUNNED';
+            if (d.stunTimer === 0) {
+              d.state = 'PATROL';
+              d.lostSightTimer = 0;
+              assignNewDronePatrolRoute(d, true);
+            }
             continue;
           }
 
           const seesPlayer = canDroneSeePlayer(d, p);
+
           if (seesPlayer) {
             if (d.state !== 'CHASE') {
               audio.playDroneSpot();
-              // Dash passive: +20% speed for 2.5s when spotted!
-              if (charDef.id === 'dash') {
-                p.speedBuffMult = Math.max(p.speedBuffMult, 1.20);
-                p.speedBuffTimer = Math.max(p.speedBuffTimer, 2.5);
+              if (charDef.id === 'dash' && p.speedBuffTimer <= 0) {
+                p.speedBuffMult = 1.20;
+                p.speedBuffTimer = 2.5;
               }
             }
-            // Being spotted immediately cancels player repairing!
+            d.state = 'CHASE';
+            d.lostSightTimer = 2.0; // Persists pursuit for 2.0s after losing line of sight
+            d.lastKnownPlayerPos = { x: p.x, y: p.y };
+            d.waypoint = { x: p.x, y: p.y };
+            d.path = [];
+            d.campTimer = 0;
+
             if (p.repairingMachineId) {
               cancelRepair();
             }
-            d.state = 'CHASE';
-            d.stateTimer = 2.0; // Continues chasing for 2.0s after losing vision
-            d.campTimer = 0;
-            d.investigatePos = { x: p.x, y: p.y };
-            d.path = findGridPath(d.x, d.y, p.x, p.y, false);
           } else if (d.state === 'CHASE') {
-            d.stateTimer -= dt;
-            if (d.stateTimer > 0) {
-              // Keep pursuing the player for 2.0 seconds after leaving vision cone
-              d.investigatePos = { x: p.x, y: p.y };
-              d.path = findGridPath(d.x, d.y, p.x, p.y, false);
+            d.lostSightTimer = Math.max(0, (d.lostSightTimer || 0) - dt);
+            if (d.lostSightTimer > 0) {
+              // Keeps pursuing player for 2 seconds even outside the vision cone
+              d.waypoint = { x: p.x, y: p.y };
+              d.path = [];
             } else {
-              d.state = 'PATROL';
-              d.investigatePos = null;
-              assignNewDronePatrolRoute(d, true);
+              // Lost sight after 2 seconds -> investigate last known spot, then patrol
+              const lastPos = d.lastKnownPlayerPos || { x: d.x, y: d.y };
+              d.state = 'INVESTIGATE';
+              d.investigatePos = lastPos;
+              d.investigateWait = 0.65;
+              d.path = findGridPath(d.x, d.y, lastPos.x, lastPos.y, false);
+              d.waypoint = d.path[0] || lastPos;
             }
           }
 
-          // Track current tile in drone history so it avoids looping the same area repeatedly
-          const curTileKey = `${Math.floor(d.x / TILE_SIZE)},${Math.floor(d.y / TILE_SIZE)}`;
-          if (d.recentTiles[d.recentTiles.length - 1] !== curTileKey) {
-            d.recentTiles.push(curTileKey);
+          // Track visited tiles so patrol favors fresh corridors
+          const curTx = Math.floor(d.x / TILE_SIZE);
+          const curTy = Math.floor(d.y / TILE_SIZE);
+          const tileKey = `${curTx},${curTy}`;
+          if (!d.recentTiles) d.recentTiles = [];
+          if (d.recentTiles[d.recentTiles.length - 1] !== tileKey) {
+            d.recentTiles.push(tileKey);
             if (d.recentTiles.length > 24) d.recentTiles.shift();
           }
 
-          // Anti-Camping Enforcement:
-          // Only redirect patrolling drones if they linger inside the Elevator zone (never U-turn mid-corridor past machines)
-          if (d.state === 'PATROL') {
-            const nearElev = Math.hypot(d.x - gameState.elevator.x, d.y - gameState.elevator.y) < ELEVATOR_EXCLUSION_RADIUS;
-            if (nearElev) {
-              d.campTimer += dt;
-              if (d.campTimer >= 1.2) {
+          // Anti-camping guard near the exit elevator
+          if (d.state !== 'CHASE') {
+            const distToElev = Math.hypot(d.x - gameState.elevator.x, d.y - gameState.elevator.y);
+            if (distToElev < ELEVATOR_EXCLUSION_RADIUS) {
+              d.campTimer = (d.campTimer || 0) + dt;
+              if (d.campTimer > 1.0) {
                 d.campTimer = 0;
-                assignNewDronePatrolRoute(d, true);
-              }
-            } else {
-              d.campTimer = 0;
-            }
-          }
-
-          // Determine target point & movement speed
-          let targetX = d.x;
-          let targetY = d.y;
-          let droneSpeed = BASE_DRONE_SPEED * d.type.patrolMult;
-
-          if (d.state === 'CHASE' && d.investigatePos) {
-            droneSpeed = BASE_DRONE_SPEED * d.type.chaseMult;
-            if (seesPlayer) {
-              targetX = p.x;
-              targetY = p.y;
-            } else {
-              // Follow computed corridor path during the 2-second pursuit window
-              if (d.path.length > 0 && Math.hypot(d.path[0].x - d.x, d.path[0].y - d.y) < 16) {
-                d.path.shift();
-              }
-              if (d.path.length > 0) {
-                targetX = d.path[0].x;
-                targetY = d.path[0].y;
-              } else {
-                targetX = d.investigatePos.x;
-                targetY = d.investigatePos.y;
-              }
-            }
-          } else if (d.state === 'INVESTIGATE' && d.investigatePos) {
-            droneSpeed = BASE_DRONE_SPEED * d.type.chaseMult * 0.92;
-            if (d.path.length > 0 && Math.hypot(d.path[0].x - d.x, d.path[0].y - d.y) < 16) {
-              d.path.shift();
-            }
-            if (d.path.length > 0) {
-              targetX = d.path[0].x;
-              targetY = d.path[0].y;
-            } else {
-              targetX = d.investigatePos.x;
-              targetY = d.investigatePos.y;
-            }
-
-            if (Math.hypot(d.investigatePos.x - d.x, d.investigatePos.y - d.y) < 22) {
-              d.investigateWait -= dt;
-              d.angle += dt * 3.5;
-              if (d.investigateWait <= 0) {
-                // Finished checking alarm: immediately patrol far away so drone does NOT camp the machine!
                 d.state = 'PATROL';
                 d.investigatePos = null;
                 assignNewDronePatrolRoute(d, true);
               }
-              continue;
-            }
-          } else {
-            // Patrol along BFS corridor path
-            if (d.path.length > 0 && Math.hypot(d.path[0].x - d.x, d.path[0].y - d.y) < 14) {
-              d.path.shift();
-            }
-            if (d.path.length === 0) {
-              assignNewDronePatrolRoute(d, gameState.elevator.open);
-            }
-            d.waypoint = d.path[0] || d.waypoint;
-            if (d.waypoint) {
-              targetX = d.waypoint.x;
-              targetY = d.waypoint.y;
+            } else {
+              d.campTimer = Math.max(0, (d.campTimer || 0) - dt);
             }
           }
 
-          const toTargetAngle = Math.atan2(targetY - d.y, targetX - d.x);
-          const angleDiff = normalizeAngle(toTargetAngle - d.angle);
-          d.angle = normalizeAngle(d.angle + Math.sign(angleDiff) * Math.min(Math.abs(angleDiff), 6.0 * dt));
-
-          const prevX = d.x;
-          const prevY = d.y;
-          moveWithSlide(d, Math.cos(toTargetAngle) * droneSpeed * dt, Math.sin(toTargetAngle) * droneSpeed * dt);
-
-          // Unstick path if blocked by an acute corner
-          if (Math.hypot(d.x - prevX, d.y - prevY) < droneSpeed * dt * 0.2) {
-            assignNewDronePatrolRoute(d, true);
-            if (d.state === 'INVESTIGATE') d.state = 'PATROL';
+          if (d.state === 'PATROL') {
+            if (!d.waypoint || Math.hypot(d.waypoint.x - d.x, d.waypoint.y - d.y) < 14) {
+              if (d.path && d.path.length > 0) {
+                d.waypoint = d.path.shift();
+              } else {
+                assignNewDronePatrolRoute(d, false);
+              }
+            }
+          } else if (d.state === 'INVESTIGATE') {
+            if (d.waypoint && Math.hypot(d.waypoint.x - d.x, d.waypoint.y - d.y) < 16) {
+              if (d.path && d.path.length > 0) {
+                d.waypoint = d.path.shift();
+              } else {
+                d.investigateWait = (d.investigateWait ?? 0.65) - dt;
+                d.angle += 2.6 * dt;
+                if (d.investigateWait <= 0) {
+                  d.state = 'PATROL';
+                  d.investigatePos = null;
+                  assignNewDronePatrolRoute(d, true);
+                }
+              }
+            }
           }
 
-          // Check Drone Catching Player
-          if (Math.hypot(d.x - p.x, d.y - p.y) < p.radius + d.radius && p.invulnTimer <= 0) {
-            handlePlayerCaught(d);
-            break;
+          const shouldMove = !(d.state === 'INVESTIGATE' && (!d.path || d.path.length === 0) && d.waypoint && Math.hypot(d.waypoint.x - d.x, d.waypoint.y - d.y) < 16);
+          if (d.waypoint && shouldMove) {
+            const dx = d.waypoint.x - d.x;
+            const dy = d.waypoint.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist > 2) {
+              const desiredAngle = Math.atan2(dy, dx);
+              const angleDiff = normalizeAngle(desiredAngle - d.angle);
+              d.angle = normalizeAngle(d.angle + Math.sign(angleDiff) * Math.min(Math.abs(angleDiff), 5.6 * dt));
+
+              const speedMult = d.state === 'CHASE' ? d.type.chaseMult : d.type.patrolMult;
+              const moveSpeed = BASE_DRONE_SPEED * speedMult;
+
+              const prevX = d.x;
+              const prevY = d.y;
+              moveWithSlide(d, Math.cos(d.angle) * moveSpeed * dt, Math.sin(d.angle) * moveSpeed * dt);
+
+              if (Math.hypot(d.x - prevX, d.y - prevY) < moveSpeed * dt * 0.25 && d.state !== 'CHASE') {
+                assignNewDronePatrolRoute(d, false);
+              }
+            }
+          }
+
+          // Drone-Player Damage Collision -> Drone deactivates for 3.0 seconds
+          const distPlayer = Math.hypot(d.x - p.x, d.y - p.y);
+          if (distPlayer < d.radius + p.radius - 2 && p.invulnTimer <= 0) {
+            p.hearts = Math.max(0, p.hearts - 1);
+            p.invulnTimer = 2.0;
+            audio.playPlayerHit();
+            gameState.shakeTime = 0.4;
+            gameState.shakeIntensity = 8;
+            spawnSparkBurst(p.x, p.y, 18, '#f43f5e');
+
+            // Deactivate the attacking drone for 3.0 seconds
+            d.disabledTimer = 3.0;
+            d.state = 'DISABLED';
+            d.lostSightTimer = 0;
+            d.path = [];
+            d.waypoint = null;
+
+            if (p.hearts <= 0) {
+              triggerGameOver();
+              return;
+            }
           }
         }
 
-        // Update Particles & Floating Texts
-        for (let i = gameState.particles.length - 1; i >= 0; i--) {
-          const pt = gameState.particles[i];
-          pt.x += pt.vx * dt;
-          pt.y += pt.vy * dt;
-          pt.vy += 220 * dt;
-          pt.life -= dt;
-          if (pt.life <= 0) gameState.particles.splice(i, 1);
-        }
-
-        for (let i = gameState.floatingTexts.length - 1; i >= 0; i--) {
-          const ft = gameState.floatingTexts[i];
-          ft.y -= 26 * dt;
-          ft.life -= dt;
-          if (ft.life <= 0) gameState.floatingTexts.splice(i, 1);
-        }
-
-        // Smooth Camera Follow centered on player
-        gameState.camera.x = p.x;
-        gameState.camera.y = p.y;
-
+        // 6. Smooth Camera Tracking
+        updateCamera(dt, false);
         updateHud();
       }
 
       function assignNewDronePatrolRoute(drone, forceFarFromObjectives = false) {
-        const elevX = gameState.elevator.x;
-        const elevY = gameState.elevator.y;
+        const candidates = [];
+        const forwardX = Math.cos(drone.angle);
+        const forwardY = Math.sin(drone.angle);
 
-        // Collect walkable tiles and score them to prevent area looping and objective camping
-        const evaluateCandidates = (elevMinDist, machMinDist) => {
-          const list = [];
+        for (let ty = 1; ty < gameState.rows - 1; ty++) {
+          for (let tx = 1; tx < gameState.cols - 1; tx++) {
+            if (gameState.grid[ty][tx] !== 0) continue;
+            const wx = (tx + 0.5) * TILE_SIZE;
+            const wy = (ty + 0.5) * TILE_SIZE;
+            const distSelf = Math.hypot(wx - drone.x, wy - drone.y);
+            if (distSelf < TILE_SIZE * 3) continue;
+
+            const distElev = Math.hypot(wx - gameState.elevator.x, wy - gameState.elevator.y);
+            if (distElev < ELEVATOR_EXCLUSION_RADIUS) continue;
+
+            const nearMachine = gameState.machines.some(m => Math.hypot(wx - m.x, wy - m.y) < MACHINE_EXCLUSION_RADIUS);
+            if (nearMachine) continue;
+
+            const key = `${tx},${ty}`;
+            const recentlyVisited = drone.recentTiles && drone.recentTiles.includes(key);
+            const toTileX = (wx - drone.x) / distSelf;
+            const toTileY = (wy - drone.y) / distSelf;
+            const forwardAlign = toTileX * forwardX + toTileY * forwardY;
+            const score = (recentlyVisited ? 0 : 120) + forwardAlign * 45 + Math.min(distSelf, TILE_SIZE * 10) * 0.25 + Math.random() * 35;
+            candidates.push({ x: wx, y: wy, score });
+          }
+        }
+
+        if (candidates.length === 0) {
           for (let ty = 1; ty < gameState.rows - 1; ty++) {
             for (let tx = 1; tx < gameState.cols - 1; tx++) {
-              if (gameState.grid[ty][tx] !== 0) continue;
-              const wx = (tx + 0.5) * TILE_SIZE;
-              const wy = (ty + 0.5) * TILE_SIZE;
-
-              const dElev = Math.hypot(wx - elevX, wy - elevY);
-              if (dElev < elevMinDist) continue;
-
-              let minMachDist = Infinity;
-              let tooCloseMachine = false;
-              for (const m of gameState.machines) {
-                if (m.completed) continue;
-                const dm = Math.hypot(wx - m.x, wy - m.y);
-                if (dm < minMachDist) minMachDist = dm;
-                if (dm < machMinDist) {
-                  tooCloseMachine = true;
-                  break;
-                }
+              if (gameState.grid[ty][tx] === 0) {
+                const wx = (tx + 0.5) * TILE_SIZE;
+                const wy = (ty + 0.5) * TILE_SIZE;
+                candidates.push({ x: wx, y: wy, score: Math.hypot(wx - gameState.elevator.x, wy - gameState.elevator.y) });
               }
-              if (tooCloseMachine) continue;
-
-              const dSelf = Math.hypot(wx - drone.x, wy - drone.y);
-              if (dSelf < TILE_SIZE * 2.5) continue;
-
-              // Favor forward-sweeping destinations over immediate 180° U-turns so drones never ping-pong
-              const dirToCand = Math.atan2(wy - drone.y, wx - drone.x);
-              const forwardAlign = Math.cos(normalizeAngle(dirToCand - drone.angle)); // +1 ahead, -1 behind
-              const backtrackPenalty = forwardAlign < -0.35 ? 240 : 0;
-
-              // Score favors unvisited areas, decent travel distance, and separation from other drones
-              const key = `${tx},${ty}`;
-              const recentVisits = drone.recentTiles.filter(k => k === key).length;
-              let otherDronePenalty = 0;
-              for (const other of gameState.drones) {
-                if (other.id !== drone.id) {
-                  const dest = other.path && other.path.length > 0 ? other.path[other.path.length - 1] : other;
-                  if (Math.hypot(wx - dest.x, wy - dest.y) < TILE_SIZE * 4) {
-                    otherDronePenalty += 220;
-                  }
-                }
-              }
-
-              const score =
-                dSelf * 1.1 +
-                dElev * (forceFarFromObjectives ? 0.9 : 0.35) +
-                (Number.isFinite(minMachDist) ? minMachDist * 0.45 : 0) +
-                forwardAlign * 85 -
-                backtrackPenalty -
-                recentVisits * 320 -
-                otherDronePenalty +
-                Math.random() * 90;
-
-              list.push({ x: wx, y: wy, tx, ty, score });
             }
           }
-          return list;
-        };
-
-        // Try strict exclusion first, then gracefully relax only if floor is packed with 10 machines
-        let candidates = evaluateCandidates(ELEVATOR_EXCLUSION_RADIUS, MACHINE_EXCLUSION_RADIUS);
-        if (candidates.length === 0) {
-          candidates = evaluateCandidates(ELEVATOR_EXCLUSION_RADIUS * 0.8, MACHINE_EXCLUSION_RADIUS * 0.55);
-        }
-        if (candidates.length === 0) {
-          candidates = evaluateCandidates(TILE_SIZE * 3.0, 0);
         }
 
-        if (candidates.length > 0) {
-          candidates.sort((a, b) => b.score - a.score);
-          const topPool = candidates.slice(0, Math.min(4, candidates.length));
-          const chosen = topPool[Math.floor(Math.random() * topPool.length)];
-          const path = findGridPath(drone.x, drone.y, chosen.x, chosen.y, true);
-          if (path.length > 0) {
-            drone.path = path;
-            drone.waypoint = path[0];
-            return;
-          }
-        }
-
-        drone.path = [];
-        drone.waypoint = { x: drone.x, y: drone.y };
-      }
-
-      function handlePlayerCaught(drone) {
-        const p = gameState.player;
-        cancelRepair();
-        p.hearts -= 1;
-        p.invulnTimer = 2.0;
-        gameState.shakeTime = 0.4;
-        gameState.shakeIntensity = 9;
-        audio.playPlayerHit();
-        spawnSparkBurst(p.x, p.y, 24, '#f43f5e');
-
-        // Deactivate the drone that dealt damage for 3 seconds (no movement, no damage, no vision)
-        drone.disabledTimer = 3.0;
-        drone.state = 'DISABLED';
-        drone.stateTimer = 0;
-        drone.investigatePos = null;
-        drone.path = [];
-
-        // Knockback away from drone
-        const awayAng = Math.atan2(p.y - drone.y, p.x - drone.x);
-        moveWithSlide(p, Math.cos(awayAng) * 28, Math.sin(awayAng) * 28);
-
-        if (p.hearts <= 0) {
-          triggerGameOver();
+        candidates.sort((a, b) => b.score - a.score);
+        const topPool = candidates.slice(0, Math.min(6, candidates.length));
+        const pick = topPool[Math.floor(Math.random() * topPool.length)];
+        if (pick) {
+          drone.path = findGridPath(drone.x, drone.y, pick.x, pick.y, true);
+          drone.waypoint = drone.path.shift() || { x: pick.x, y: pick.y };
         }
       }
 
-      function triggerGameOver() {
-        gameState.mode = 'GAMEOVER';
-        const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
-        document.getElementById('val-go-floor').textContent = String(gameState.floor).padStart(2, '0');
-        document.getElementById('val-go-mach').textContent = String(gameState.totalMachinesRepaired);
-        document.getElementById('val-go-char').textContent = charDef.name;
-        document.getElementById('screen-gameover').classList.remove('hidden');
-        document.getElementById('hud-overlay').classList.add('hidden');
-        document.getElementById('mobile-controls-layer').classList.add('hidden');
+      function getCameraZoom() {
+        const longSide = Math.max(canvas.width, canvas.height);
+        const shortSide = Math.min(canvas.width, canvas.height);
+        // Tightens base field of view to ~13 x 7.5 tiles, scalable up to +50% wider FOV
+        const baseZoom = Math.max(1.35, Math.min(3.2, Math.max(longSide / 580, shortSide / 340)));
+        const fovScale = 1 + Math.max(0, Math.min(0.5, settings.fovExtra || 0));
+        return baseZoom / fovScale;
+      }
+
+      function updateCamera(dt = 0.016, instant = false) {
+        const zoom = getCameraZoom();
+        gameState.camera.zoom = zoom;
+
+        const worldW = gameState.cols * TILE_SIZE;
+        const worldH = gameState.rows * TILE_SIZE;
+        const viewW = canvas.width / zoom;
+        const viewH = canvas.height / zoom;
+
+        let targetX;
+        let targetY;
+
+        if (worldW <= viewW) {
+          targetX = (worldW - viewW) / 2;
+        } else {
+          targetX = Math.max(0, Math.min(worldW - viewW, gameState.player.x - viewW / 2));
+        }
+
+        if (worldH <= viewH) {
+          targetY = (worldH - viewH) / 2;
+        } else {
+          targetY = Math.max(0, Math.min(worldH - viewH, gameState.player.y - viewH / 2));
+        }
+
+        if (instant) {
+          gameState.camera.x = targetX;
+          gameState.camera.y = targetY;
+        } else {
+          const smooth = 1 - Math.exp(-11 * Math.max(0.001, dt));
+          gameState.camera.x += (targetX - gameState.camera.x) * smooth;
+          gameState.camera.y += (targetY - gameState.camera.y) * smooth;
+        }
       }
 
       /* =======================================================================
          19. HUD SYNCHRONIZATION
          ======================================================================= */
+      function buildPixelHeartSvg(filled) {
+        const fillMain = filled ? '#f43f5e' : '#1e293b';
+        const fillShade = filled ? '#be123c' : '#0f172a';
+        const shine = filled ? '#fda4af' : '#334155';
+        return `
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" viewBox="0 0 13 12" shape-rendering="crispEdges" aria-hidden="true">
+            <path d="M2 0h3v1h1v1h1V1h1V0h3v1h1v1h1v4h-1v2h-2v2H8v1H7v1H6v-1H5v-1H3V8H1V6H0V2h1V1h1V0z" fill="#04060e"/>
+            <path d="M2 1h3v1h1v1h1V2h1V1h3v1h1v4h-1v2H9v2H7v1H6v-1H4V8H2V6H1V2h1V1z" fill="${fillMain}"/>
+            <path d="M10 2h1v4h-1v2H8v2H7v1H6v-1h1V8h2V6h1V2z" fill="${fillShade}"/>
+            <rect x="2" y="2" width="2" height="1" fill="${shine}"/>
+            <rect x="2" y="3" width="1" height="1" fill="${shine}"/>
+          </svg>
+        `;
+      }
+
       function updateHud() {
         const p = gameState.player;
-        const heartsArr = [];
-        for (let i = 0; i < p.maxHearts; i++) {
-          heartsArr.push(i < p.hearts ? '♥' : '♡');
+        const heartsContainer = document.getElementById('hud-hearts');
+        const heartStateKey = `${p.hearts}/${p.maxHearts}`;
+        if (heartsContainer.dataset.state !== heartStateKey) {
+          heartsContainer.dataset.state = heartStateKey;
+          let heartsHtml = '';
+          for (let i = 0; i < p.maxHearts; i++) {
+            heartsHtml += buildPixelHeartSvg(i < p.hearts);
+          }
+          heartsContainer.innerHTML = heartsHtml;
         }
-        document.getElementById('hud-hearts').textContent = heartsArr.join(' ');
+
         document.getElementById('hud-floor').textContent = `${t('floor')} ${String(gameState.floor).padStart(2, '0')}`;
         document.getElementById('hud-map-name').textContent = gameState.mapTheme.name[settings.lang];
 
@@ -3148,29 +3130,32 @@
         const doneCount = gameState.machines.filter(m => m.completed).length;
         const totalCount = gameState.machines.length;
         const machEl = document.getElementById('hud-machines');
+        const machScreenEl = document.getElementById('hud-machine-screen');
         if (gameState.elevator.open) {
           machEl.textContent = t('elevatorOpen');
           machEl.className = 'text-[9px] sm:text-xs text-emerald-400 blink-retro';
+          if (machScreenEl) machScreenEl.setAttribute('fill', '#22c55e');
         } else {
           machEl.textContent = `${doneCount}/${totalCount}`;
           machEl.className = 'text-[10px] sm:text-xs text-amber-300';
+          if (machScreenEl) machScreenEl.setAttribute('fill', '#facc15');
         }
 
         const stamPct = Math.max(0, Math.min(100, (p.stamina / p.maxStamina) * 100));
         const stamFill = document.getElementById('hud-stamina-fill');
         stamFill.style.width = `${stamPct}%`;
-        stamFill.className = `h-full transition-all duration-75 ${p.exhausted ? 'bg-rose-500' : (p.infiniteStaminaTimer > 0 ? 'bg-yellow-300' : 'bg-emerald-400')}`;
+        stamFill.className = `h-full transition-all duration-75 ${p.exhausted ? 'bg-rose-500' : (p.infiniteStaminaTimer > 0 ? 'bg-amber-400' : 'bg-emerald-400')}`;
 
-        document.getElementById('hud-passive-badge').classList.toggle('hidden', p.speedBuffTimer <= 0 && p.overclockTimer <= 0);
+        const hasBuff = p.speedBuffTimer > 0 || p.overclockTimer > 0 || p.infiniteStaminaTimer > 0;
+        document.getElementById('hud-passive-badge').classList.toggle('hidden', !hasBuff);
 
-        // Skill cooldown indicators (Desktop & Mobile)
         const skillStatus = document.getElementById('hud-skill-status');
         const mobSkillCd = document.getElementById('lbl-mob-skill-cd');
         if (p.skillCooldown > 0) {
-          const sec = `${Math.ceil(p.skillCooldown)}s`;
-          skillStatus.textContent = sec;
+          const cdStr = `${Math.ceil(p.skillCooldown)}s`;
+          skillStatus.textContent = cdStr;
           skillStatus.className = 'text-rose-400';
-          mobSkillCd.textContent = sec;
+          mobSkillCd.textContent = cdStr;
           btnMobSkill.style.opacity = '0.55';
         } else {
           skillStatus.textContent = 'OK';
@@ -3179,786 +3164,586 @@
           btnMobSkill.style.opacity = '1';
         }
 
-        // Contextual Prompt & Mobile Interact Highlight
         const promptEl = document.getElementById('hud-prompt');
-        const nearMach = getNearestMachine(58);
-        const nearElev = gameState.elevator.open && Math.hypot(p.x - gameState.elevator.x, p.y - gameState.elevator.y) <= 56;
-
-        if (p.repairingMachineId) {
-          promptEl.textContent = t('promptStop');
-          promptEl.classList.remove('hidden');
-          btnMobInteract.style.boxShadow = '0 0 18px #facc15';
-        } else if (nearElev) {
-          promptEl.textContent = t('promptElevator');
-          promptEl.classList.remove('hidden');
-          btnMobInteract.style.boxShadow = '0 0 18px #22c55e';
-        } else if (nearMach && !nearMach.completed) {
-          promptEl.textContent = t('promptRepair');
-          promptEl.classList.remove('hidden');
-          btnMobInteract.style.boxShadow = '0 0 18px #facc15';
+        if (gameState.mode === 'PLAYING') {
+          if (p.repairingMachineId) {
+            promptEl.textContent = t('promptStop');
+            promptEl.classList.remove('hidden');
+          } else if (gameState.elevator.open && Math.hypot(p.x - gameState.elevator.x, p.y - gameState.elevator.y) <= 56) {
+            promptEl.textContent = t('promptElevator');
+            promptEl.classList.remove('hidden');
+          } else {
+            const nearMach = getNearestMachine(58);
+            if (nearMach && !nearMach.completed) {
+              promptEl.textContent = t('promptRepair');
+              promptEl.classList.remove('hidden');
+            } else {
+              promptEl.classList.add('hidden');
+            }
+          }
         } else {
           promptEl.classList.add('hidden');
-          btnMobInteract.style.boxShadow = '0 4px 0 rgba(0,0,0,0.85)';
         }
       }
 
       /* =======================================================================
-         20. 8-BIT PIXEL ART RENDERER (MAP, MACHINES, DRONES, PLAYER, BLACKOUT)
+         20. 8-BIT RETRO WORLD, CHARACTER, DRONE & BLACKOUT RENDERER
          ======================================================================= */
-      // Offscreen darkness canvas for smooth Blackout radial cutout
-      const darkCanvas = document.createElement('canvas');
-      const darkCtx = darkCanvas.getContext('2d');
+      function renderWorld() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const theme = gameState.mapTheme;
 
-      function renderGame() {
-        const W = canvas.width;
-        const H = canvas.height;
         ctx.imageSmoothingEnabled = false;
-
         ctx.fillStyle = '#03050c';
-        ctx.fillRect(0, 0, W, H);
+        ctx.fillRect(0, 0, w, h);
 
         if (gameState.mode === 'MENU' || gameState.mode === 'CHAR_SELECT') {
-          renderAttractBackground(W, H);
           return;
         }
 
-        const theme = gameState.mapTheme;
+        ctx.save();
+        const zoom = gameState.camera.zoom || getCameraZoom();
         let shakeX = 0;
         let shakeY = 0;
         if (gameState.shakeTime > 0) {
           shakeX = (Math.random() - 0.5) * gameState.shakeIntensity * 2;
           shakeY = (Math.random() - 0.5) * gameState.shakeIntensity * 2;
         }
+        ctx.scale(zoom, zoom);
+        ctx.translate(-(gameState.camera.x + shakeX), -(gameState.camera.y + shakeY));
 
-        const camOffsetX = Math.floor(W / 2 - gameState.camera.x + shakeX);
-        const camOffsetY = Math.floor(H / 2 - gameState.camera.y + shakeY);
+        const worldW = gameState.cols * TILE_SIZE;
+        const worldH = gameState.rows * TILE_SIZE;
 
-        ctx.save();
-        ctx.translate(camOffsetX, camOffsetY);
+        // 1. Floor Base & 8-Bit Tile Grid Dots
+        ctx.fillStyle = theme.floorBg;
+        ctx.fillRect(0, 0, worldW, worldH);
 
-        // 1. Render Map Tiles & Pac-Man Style Double-Outlined Walls
-        for (let ty = 0; ty < gameState.rows; ty++) {
-          for (let tx = 0; tx < gameState.cols; tx++) {
-            const px = tx * TILE_SIZE;
-            const py = ty * TILE_SIZE;
-
+        ctx.fillStyle = theme.tileDot;
+        for (let ty = 1; ty < gameState.rows - 1; ty++) {
+          for (let tx = 1; tx < gameState.cols - 1; tx++) {
             if (gameState.grid[ty][tx] === 0) {
-              ctx.fillStyle = theme.floorBg;
-              ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-
-              // Subtle 8-bit grid dot
-              ctx.fillStyle = theme.tileDot;
-              ctx.fillRect(px + TILE_SIZE / 2 - 2, py + TILE_SIZE / 2 - 2, 4, 4);
-            } else {
-              // Wall Base
-              ctx.fillStyle = theme.wallFill;
-              ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-
-              // Outer Neon Border on exposed edges
-              ctx.fillStyle = theme.wallOuter;
-              if (isWallTile(tx, ty - 1) === false) ctx.fillRect(px, py, TILE_SIZE, 4);
-              if (isWallTile(tx, ty + 1) === false) ctx.fillRect(px, py + TILE_SIZE - 4, TILE_SIZE, 4);
-              if (isWallTile(tx - 1, ty) === false) ctx.fillRect(px, py, 4, TILE_SIZE);
-              if (isWallTile(tx + 1, ty) === false) ctx.fillRect(px + TILE_SIZE - 4, py, 4, TILE_SIZE);
-
-              // Inner 8-bit highlight line
-              ctx.strokeStyle = theme.wallInner;
-              ctx.lineWidth = 2;
-              ctx.strokeRect(px + 7, py + 7, TILE_SIZE - 14, TILE_SIZE - 14);
+              ctx.fillRect(tx * TILE_SIZE + TILE_SIZE / 2 - 2, ty * TILE_SIZE + TILE_SIZE / 2 - 2, 4, 4);
             }
           }
         }
 
-        // 2. Map Thematic Props
-        for (const pr of gameState.props) {
+        // Thematic Map Floor Props
+        for (const prop of gameState.props) {
           ctx.fillStyle = theme.propColor;
-          ctx.globalAlpha = 0.25;
+          ctx.globalAlpha = 0.35;
           if (theme.id === 'neon_arcade') {
-            ctx.fillRect(pr.x - 6, pr.y - 6, 12, 12);
+            ctx.fillRect(prop.x - 5, prop.y - 5, 10, 10);
           } else if (theme.id === 'rusty_foundry') {
-            ctx.fillRect(pr.x - 8, pr.y - 3, 16, 6);
+            ctx.fillRect(prop.x - 8, prop.y - 3, 16, 6);
           } else {
-            ctx.beginPath();
-            ctx.arc(pr.x, pr.y, 5, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillRect(prop.x - 4, prop.y - 8, 8, 16);
           }
           ctx.globalAlpha = 1;
         }
 
-        // 3. Render Elevator
-        renderElevator(gameState.elevator);
+        // 2. Pac-Man Style Double-Outlined Retro Walls
+        for (let ty = 0; ty < gameState.rows; ty++) {
+          for (let tx = 0; tx < gameState.cols; tx++) {
+            if (gameState.grid[ty][tx] === 1) {
+              const wx = tx * TILE_SIZE;
+              const wy = ty * TILE_SIZE;
 
-        // 4. Render Machines & Progress Bars
+              ctx.fillStyle = theme.wallFill;
+              ctx.fillRect(wx, wy, TILE_SIZE, TILE_SIZE);
+
+              ctx.strokeStyle = theme.wallOuter;
+              ctx.lineWidth = 3;
+              ctx.strokeRect(wx + 2, wy + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+
+              ctx.strokeStyle = theme.wallInner;
+              ctx.lineWidth = 1.5;
+              ctx.strokeRect(wx + 7, wy + 7, TILE_SIZE - 14, TILE_SIZE - 14);
+            }
+          }
+        }
+
+        // 3. Elevator Pad
+        const elev = gameState.elevator;
+        ctx.fillStyle = elev.open ? 'rgba(34, 197, 94, 0.25)' : 'rgba(148, 163, 184, 0.14)';
+        ctx.fillRect(elev.x - 18, elev.y - 18, 36, 36);
+        ctx.strokeStyle = elev.open ? '#22c55e' : '#64748b';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(elev.x - 18, elev.y - 18, 36, 36);
+        ctx.fillStyle = elev.open ? '#4ade80' : '#94a3b8';
+        ctx.font = '8px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('EXIT', elev.x, elev.y + 3);
+
+        // 4. Machines (8-Bit Generator Cabinets)
         for (const m of gameState.machines) {
           renderMachine(m);
         }
 
-        // 5. Render EMP Shockwaves
-        for (const w of gameState.empWaves) {
-          ctx.strokeStyle = `rgba(192, 132, 252, ${Math.max(0, w.alpha)})`;
+        // 5. EMP Waves
+        for (const ew of gameState.empWaves) {
+          ctx.strokeStyle = `rgba(192, 132, 252, ${Math.max(0, ew.alpha)})`;
           ctx.lineWidth = 4;
           ctx.beginPath();
-          ctx.arc(w.x, w.y, w.radius, 0, Math.PI * 2);
+          ctx.arc(ew.x, ew.y, ew.radius, 0, Math.PI * 2);
           ctx.stroke();
         }
 
-        // 6. Render Player Sprite
-        renderPlayer(gameState.player);
+        // 6. Player Character Sprite
+        renderPlayer();
 
-        // 7. Render Drones (Bodies)
+        // 7. Drones & 45° Vision Cones (Drawn before blackout mask so cones glow in the dark!)
         for (const d of gameState.drones) {
-          renderDroneBody(d);
+          renderDrone(d, false);
         }
 
-        // 8. Render Particles & Floating Text
+        // 8. Blackout Darkness Layer with Circular Flashlight & Glowing Drone Cones
+        if (gameState.isBlackout) {
+          renderBlackoutMask();
+          for (const d of gameState.drones) {
+            renderDrone(d, true);
+          }
+        }
+
+        // 9. Welding Spark Particles & Floating Texts
         for (const pt of gameState.particles) {
           ctx.fillStyle = pt.color;
-          ctx.fillRect(pt.x - pt.size / 2, pt.y - pt.size / 2, pt.size, pt.size);
+          ctx.fillRect(Math.round(pt.x - pt.size / 2), Math.round(pt.y - pt.size / 2), pt.size, pt.size);
         }
 
         for (const ft of gameState.floatingTexts) {
           ctx.fillStyle = ft.color;
           ctx.font = '10px "Press Start 2P", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.fillText(ft.text, Math.round(ft.x), Math.round(ft.y));
         }
 
         ctx.restore();
 
-        // 9. BLACKOUT MASK (If active, plunges map into darkness except circular player light)
-        if (gameState.isBlackout) {
-          renderBlackoutMask(W, H, camOffsetX, camOffsetY);
-        }
-
-        // 10. Render Raycasted 45° Drone Vision Cones (ABOVE Blackout so they glow vividly in the dark!)
-        ctx.save();
-        ctx.translate(camOffsetX, camOffsetY);
-        for (const d of gameState.drones) {
-          if (d.stunTimer <= 0 && d.disabledTimer <= 0) {
-            renderDroneVisionCone(d, gameState.isBlackout);
-          }
-        }
-
-        // Aura Passive: Sixth Sense highlights drones through walls & darkness within 220px
-        const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId);
-        if (charDef && charDef.id === 'aura') {
-          for (const d of gameState.drones) {
-            if (Math.hypot(d.x - gameState.player.x, d.y - gameState.player.y) <= 220) {
-              ctx.strokeStyle = '#e879f9';
-              ctx.lineWidth = 3;
-              ctx.strokeRect(d.x - 16, d.y - 16, 32, 32);
-            }
-          }
-        }
-        ctx.restore();
-
-        // 11. Top Center Floating Alert Banner (Panic Mode / Ability / Bonus)
+        // 10. Top-Center Event Banner
         if (gameState.bannerTimer > 0 && gameState.bannerMsg) {
           ctx.save();
-          ctx.font = '10px "Press Start 2P", monospace';
-          const textW = ctx.measureText(gameState.bannerMsg).width;
-          const boxW = Math.min(W - 24, textW + 28);
-          const bx = (W - boxW) / 2;
-          const by = 68;
-          ctx.fillStyle = 'rgba(6, 9, 24, 0.92)';
-          ctx.fillRect(bx, by, boxW, 28);
+          ctx.fillStyle = 'rgba(6, 9, 24, 0.9)';
+          const boxW = Math.min(w - 24, 540);
+          const bx = (w - boxW) / 2;
+          const by = 64;
+          ctx.fillRect(bx, by, boxW, 34);
           ctx.strokeStyle = '#facc15';
           ctx.lineWidth = 2;
-          ctx.strokeRect(bx, by, boxW, 28);
+          ctx.strokeRect(bx, by, boxW, 34);
+
           ctx.fillStyle = '#facc15';
+          ctx.font = w < 520 ? '8px "Press Start 2P", monospace' : '10px "Press Start 2P", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(gameState.bannerMsg, W / 2, by + 18, boxW - 12);
+          ctx.fillText(gameState.bannerMsg, w / 2, by + 21);
           ctx.restore();
         }
       }
 
-      function renderElevator(elev) {
-        const x = elev.x;
-        const y = elev.y;
-        ctx.fillStyle = elev.open ? '#064e3b' : '#1e293b';
-        ctx.fillRect(x - 18, y - 18, 36, 36);
-
-        ctx.strokeStyle = elev.open ? '#22c55e' : '#64748b';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x - 18, y - 18, 36, 36);
-
-        // Elevator Doors split line
-        if (!elev.open) {
-          ctx.fillStyle = '#475569';
-          ctx.fillRect(x - 14, y - 14, 12, 28);
-          ctx.fillRect(x + 2, y - 14, 12, 28);
-        } else {
-          // Glowing green exit chevron
-          ctx.fillStyle = '#4ade80';
-          ctx.fillRect(x - 6, y - 8, 12, 16);
-        }
-      }
-
       function renderMachine(m) {
-        const x = m.x;
-        const y = m.y;
+        const x = Math.round(m.x);
+        const y = Math.round(m.y);
+        const pulse = Math.floor(performance.now() / 240) % 2 === 0;
 
-        // 8-bit Generator Cabinet
-        ctx.fillStyle = m.completed ? '#14532d' : '#1e1b4b';
-        ctx.fillRect(x - 14, y - 16, 28, 32);
+        // Ground shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(x - 16, y + 13, 32, 5);
 
-        ctx.strokeStyle = m.completed ? '#22c55e' : '#facc15';
+        // Side power conduits
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(x - 17, y - 6, 3, 14);
+        ctx.fillRect(x + 14, y - 6, 3, 14);
+
+        // Top beacon antenna
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(x - 2, y - 22, 4, 5);
+        ctx.fillStyle = m.completed ? '#22c55e' : (pulse ? '#f43f5e' : '#facc15');
+        ctx.fillRect(x - 3, y - 25, 6, 4);
+
+        // 8-bit Generator Cabinet Frame
+        ctx.fillStyle = m.completed ? '#064e3b' : '#17153b';
+        ctx.fillRect(x - 14, y - 17, 28, 33);
+
+        ctx.strokeStyle = m.completed ? '#4ade80' : '#facc15';
         ctx.lineWidth = 3;
-        ctx.strokeRect(x - 14, y - 16, 28, 32);
+        ctx.strokeRect(x - 14, y - 17, 28, 33);
 
-        // Pixel screen & coils on machine
-        ctx.fillStyle = m.completed ? '#4ade80' : (Math.floor(performance.now() / 250) % 2 === 0 ? '#f43f5e' : '#facc15');
-        ctx.fillRect(x - 8, y - 10, 16, 8);
+        // CRT Monitor Display Screen
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(x - 10, y - 13, 20, 10);
+        ctx.fillStyle = m.completed ? '#22c55e' : (pulse ? '#facc15' : '#fb7185');
+        ctx.fillRect(x - 8, y - 11, 16, 6);
+        // Pixel screen glare
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x - 7, y - 10, 4, 2);
 
-        // Gear details
-        ctx.fillStyle = '#94a3b8';
-        ctx.fillRect(x - 9, y + 3, 7, 7);
-        ctx.fillRect(x + 2, y + 3, 7, 7);
+        // Dual Energy Coils / Battery Cells on Lower Chassis
+        ctx.fillStyle = m.completed ? '#34d399' : '#38bdf8';
+        ctx.fillRect(x - 9, y + 1, 7, 10);
+        ctx.fillRect(x + 2, y + 1, 7, 10);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(x - 9, y + 5, 7, 2);
+        ctx.fillRect(x + 2, y + 5, 7, 2);
 
         // Progress bar above uncompleted machines with progress > 0
         if (!m.completed && m.progress > 0) {
           const bw = 34;
           ctx.fillStyle = '#020617';
-          ctx.fillRect(x - bw / 2, y - 26, bw, 6);
+          ctx.fillRect(x - bw / 2, y - 34, bw, 6);
           ctx.fillStyle = '#facc15';
-          ctx.fillRect(x - bw / 2 + 1, y - 25, (bw - 2) * (m.progress / 100), 4);
+          ctx.fillRect(x - bw / 2 + 1, y - 33, (bw - 2) * (m.progress / 100), 4);
         }
       }
 
-      function renderPlayer(p) {
-        if (p.invulnTimer > 0 && Math.floor(p.invulnTimer * 16) % 2 === 0) return;
+      function renderPlayer() {
+        const p = gameState.player;
+        if (p.invulnTimer > 0 && Math.floor(p.invulnTimer * 14) % 2 === 0) return;
 
         const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
-        const bob = Math.sin(p.animFrame) * 2;
         const x = Math.round(p.x);
-        const y = Math.round(p.y + bob);
+        const y = Math.round(p.y);
+        const bob = Math.sin(p.animFrame) * 2;
 
         // Shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
         ctx.fillRect(x - 10, y + 10, 20, 5);
 
-        // 8-bit Character Body
+        // Pixel-art Retro Character Body
         ctx.fillStyle = charDef.color;
-        ctx.fillRect(x - 10, y - 12, 20, 22);
-        ctx.strokeStyle = '#090d16';
+        ctx.fillRect(x - 10, y - 12 + bob, 20, 22);
+        ctx.strokeStyle = '#050711';
         ctx.lineWidth = 2;
-        ctx.strokeRect(x - 10, y - 12, 20, 22);
+        ctx.strokeRect(x - 10, y - 12 + bob, 20, 22);
 
-        // Pixel Visor facing movement direction
-        const lookX = Math.round(p.dirX * 4);
-        const lookY = Math.round(p.dirY * 3);
+        // Directional Visor Eyes
+        const vx = Math.round(p.dirX * 4);
+        const vy = Math.round(p.dirY * 3);
         ctx.fillStyle = charDef.visor;
-        ctx.fillRect(x - 6 + lookX, y - 7 + lookY, 12, 5);
+        ctx.fillRect(x - 6 + vx, y - 7 + vy + bob, 12, 5);
+
+        // Repairing wrench indicator
+        if (p.repairingMachineId) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = '8px "Press Start 2P", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('FIX...', x, y - 18);
+        }
       }
 
-      function renderDroneBody(d) {
-        const isDisabled = d.disabledTimer > 0;
+      function renderDrone(d, glowPass) {
         const x = Math.round(d.x);
-        const y = Math.round(d.y + (isDisabled ? 0 : Math.sin(d.animPhase) * 2));
+        const y = Math.round(d.y);
+        const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
+        const isDisabled = d.disabledTimer > 0;
 
-        // Pac-Man Ghost / Retro Drone Dome + Wavy Skirt
-        ctx.fillStyle = isDisabled ? '#334155' : (d.stunTimer > 0 ? '#64748b' : d.type.bodyColor);
+        // 1. Cast 45° Wall-Occluded Vision Cone (hidden while disabled or stunned)
+        if (d.stunTimer <= 0 && !isDisabled) {
+          const halfCone = (d.type.coneAngleDeg * 0.5) * (Math.PI / 180);
+          const rayCount = 24;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          for (let i = 0; i <= rayCount; i++) {
+            const rayAngle = d.angle - halfCone + (i / rayCount) * (halfCone * 2);
+            const hit = castRay(x, y, rayAngle, d.type.coneRange);
+            ctx.lineTo(hit.x, hit.y);
+          }
+          ctx.closePath();
+
+          if (glowPass) {
+            ctx.fillStyle = d.state === 'CHASE' ? 'rgba(244, 63, 94, 0.42)' : 'rgba(56, 189, 248, 0.32)';
+          } else {
+            ctx.fillStyle = d.state === 'CHASE' ? d.type.chaseConeColor : d.type.coneColor;
+          }
+          ctx.fill();
+        }
+
+        if (glowPass && charDef.id !== 'aura') return;
+
+        // 2. Pac-Man Ghost-Inspired Retro Mechanical Drone Body
+        ctx.save();
+        if (isDisabled) ctx.globalAlpha = 0.52;
+
+        ctx.fillStyle = isDisabled ? '#475569' : (d.stunTimer > 0 ? '#a855f7' : d.type.bodyColor);
         ctx.beginPath();
-        ctx.arc(x, y - 2, 13, Math.PI, 0);
-        ctx.lineTo(x + 13, y + 11);
-        ctx.lineTo(x + 6, y + 7);
+        ctx.arc(x, y - 2, 12, Math.PI, 0);
+        ctx.lineTo(x + 12, y + 11);
+        const wave = Math.floor(d.animPhase) % 2 === 0 ? 3 : -3;
+        ctx.lineTo(x + 6, y + 8 + wave);
         ctx.lineTo(x, y + 11);
-        ctx.lineTo(x - 6, y + 7);
-        ctx.lineTo(x - 13, y + 11);
+        ctx.lineTo(x - 6, y + 8 - wave);
+        ctx.lineTo(x - 12, y + 11);
         ctx.closePath();
         ctx.fill();
 
         // Glowing Scanner Eye
-        const eyeX = x + Math.cos(d.angle) * 5;
-        const eyeY = y - 2 + Math.sin(d.angle) * 4;
-        ctx.fillStyle = isDisabled ? '#0f172a' : (d.stunTimer > 0 ? '#cbd5e1' : d.type.eyeColor);
-        ctx.fillRect(eyeX - 4, eyeY - 3, 8, 6);
+        const ex = Math.cos(d.angle) * 4;
+        const ey = Math.sin(d.angle) * 4;
+        ctx.fillStyle = isDisabled ? '#94a3b8' : (d.state === 'CHASE' ? '#facc15' : d.type.eyeColor);
+        ctx.fillRect(Math.round(x - 4 + ex), Math.round(y - 5 + ey), 8, 5);
 
-        // Alert '!', Deactivated countdown, or Stunned indicator
+        ctx.restore();
+
         if (isDisabled) {
           ctx.fillStyle = '#94a3b8';
           ctx.font = '8px "Press Start 2P", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(`OFF ${Math.ceil(d.disabledTimer)}s`, x, y - 18);
-        } else if (d.state === 'CHASE' && d.stunTimer <= 0) {
-          ctx.fillStyle = '#facc15';
-          ctx.font = '12px "Press Start 2P", monospace';
-          ctx.textAlign = 'center';
-          ctx.fillText('!', x, y - 18);
+          ctx.fillText(`OFF ${Math.ceil(d.disabledTimer)}s`, x, y - 16);
         } else if (d.stunTimer > 0) {
-          ctx.fillStyle = '#c084fc';
-          ctx.font = '9px "Press Start 2P", monospace';
+          ctx.fillStyle = '#e9d5ff';
+          ctx.font = '8px "Press Start 2P", monospace';
           ctx.textAlign = 'center';
-          ctx.fillText('⚡', x, y - 18);
+          ctx.fillText('STUN!', x, y - 16);
+        } else if (d.state === 'CHASE') {
+          ctx.fillStyle = '#f43f5e';
+          ctx.font = '10px "Press Start 2P", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('!', x, y - 16);
+        } else if (d.state === 'INVESTIGATE') {
+          ctx.fillStyle = '#facc15';
+          ctx.font = '10px "Press Start 2P", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('?', x, y - 16);
         }
       }
 
-      function renderDroneVisionCone(drone, isBlackout) {
-        const halfRad = (drone.type.coneAngleDeg * 0.5) * (Math.PI / 180);
-        const rayCount = 26;
-        const startAng = drone.angle - halfRad;
-        const stepAng = (halfRad * 2) / rayCount;
+      function renderBlackoutMask() {
+        const p = gameState.player;
+        const worldW = gameState.cols * TILE_SIZE;
+        const worldH = gameState.rows * TILE_SIZE;
+        const lightRadius = 148 * gameState.upgrades.lightRadiusMult;
 
-        ctx.beginPath();
-        ctx.moveTo(drone.x, drone.y);
-        for (let i = 0; i <= rayCount; i++) {
-          const a = startAng + i * stepAng;
-          const hit = castRay(drone.x, drone.y, a, drone.type.coneRange);
-          ctx.lineTo(hit.x, hit.y);
+        const offCanvas = renderBlackoutMask.offCanvas || (renderBlackoutMask.offCanvas = document.createElement('canvas'));
+        if (offCanvas.width !== worldW || offCanvas.height !== worldH) {
+          offCanvas.width = worldW;
+          offCanvas.height = worldH;
         }
-        ctx.closePath();
+        const octx = offCanvas.getContext('2d');
+        octx.globalCompositeOperation = 'source-over';
+        octx.fillStyle = 'rgba(2, 4, 10, 0.96)';
+        octx.fillRect(0, 0, worldW, worldH);
 
-        if (isBlackout) {
-          // Brightly glowing neon beam in Blackout mode!
-          ctx.fillStyle = drone.state === 'CHASE'
-            ? 'rgba(244, 63, 94, 0.52)'
-            : 'rgba(250, 204, 21, 0.42)';
-          ctx.fill();
-          ctx.strokeStyle = drone.state === 'CHASE' ? '#fb7185' : '#fef08a';
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        } else {
-          ctx.fillStyle = drone.state === 'CHASE' ? drone.type.chaseConeColor : drone.type.coneColor;
-          ctx.fill();
-        }
-      }
+        octx.globalCompositeOperation = 'destination-out';
+        const grad = octx.createRadialGradient(p.x, p.y, lightRadius * 0.25, p.x, p.y, lightRadius);
+        grad.addColorStop(0, 'rgba(0,0,0,1)');
+        grad.addColorStop(0.75, 'rgba(0,0,0,0.85)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        octx.fillStyle = grad;
+        octx.beginPath();
+        octx.arc(p.x, p.y, lightRadius, 0, Math.PI * 2);
+        octx.fill();
 
-      function renderBlackoutMask(W, H, camOffsetX, camOffsetY) {
-        if (darkCanvas.width !== W || darkCanvas.height !== H) {
-          darkCanvas.width = W;
-          darkCanvas.height = H;
-        }
-
-        darkCtx.globalCompositeOperation = 'source-over';
-        darkCtx.fillStyle = 'rgba(2, 4, 10, 0.96)';
-        darkCtx.fillRect(0, 0, W, H);
-
-        // Punch circular light radius around player
-        const px = gameState.player.x + camOffsetX;
-        const py = gameState.player.y + camOffsetY;
-        const lightRadius = 155 * gameState.upgrades.lightRadiusMult;
-
-        darkCtx.globalCompositeOperation = 'destination-out';
-        const grad = darkCtx.createRadialGradient(px, py, lightRadius * 0.25, px, py, lightRadius);
-        grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        grad.addColorStop(0.75, 'rgba(0, 0, 0, 0.85)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        darkCtx.fillStyle = grad;
-        darkCtx.beginPath();
-        darkCtx.arc(px, py, lightRadius, 0, Math.PI * 2);
-        darkCtx.fill();
-
-        // Subtle emergency LED glow on unfinished machines & open elevator
-        for (const m of gameState.machines) {
-          if (!m.completed) {
-            const mx = m.x + camOffsetX;
-            const my = m.y + camOffsetY;
-            const mGrad = darkCtx.createRadialGradient(mx, my, 2, mx, my, 28);
-            mGrad.addColorStop(0, 'rgba(0,0,0,0.65)');
-            mGrad.addColorStop(1, 'rgba(0,0,0,0)');
-            darkCtx.fillStyle = mGrad;
-            darkCtx.beginPath();
-            darkCtx.arc(mx, my, 28, 0, Math.PI * 2);
-            darkCtx.fill();
-          }
-        }
-
-        if (gameState.elevator.open) {
-          const ex = gameState.elevator.x + camOffsetX;
-          const ey = gameState.elevator.y + camOffsetY;
-          const eGrad = darkCtx.createRadialGradient(ex, ey, 4, ex, ey, 46);
-          eGrad.addColorStop(0, 'rgba(0,0,0,0.85)');
-          eGrad.addColorStop(1, 'rgba(0,0,0,0)');
-          darkCtx.fillStyle = eGrad;
-          darkCtx.beginPath();
-          darkCtx.arc(ex, ey, 46, 0, Math.PI * 2);
-          darkCtx.fill();
-        }
-
-        ctx.drawImage(darkCanvas, 0, 0);
-      }
-
-      // Subtle retro arcade grid animation behind Main Menu
-      function renderAttractBackground(W, H) {
-        ctx.strokeStyle = 'rgba(37, 99, 235, 0.16)';
-        ctx.lineWidth = 2;
-        const step = 40;
-        const shift = (performance.now() * 0.02) % step;
-        for (let x = -step + shift; x < W; x += step) {
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-        }
-        for (let y = -step + shift; y < H; y += step) {
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-        }
-      }
-
-      // Animated Mini Pac-Man Style Chase inside Main Menu Title Banner
-      function renderBannerChase() {
-        const bw = bannerCanvas.width;
-        const bh = bannerCanvas.height;
-        if (!bw || !bh) return;
-        bannerCtx.clearRect(0, 0, bw, bh);
-
-        const tSec = performance.now() / 1000;
-        const period = 4.2;
-        const progress = (tSec % period) / period;
-        const runnerX = -20 + progress * (bw + 90);
-        const droneX = runnerX - 44;
-        const cy = bh / 2;
-
-        // Pac-dots
-        bannerCtx.fillStyle = '#38bdf8';
-        for (let dx = 14; dx < bw; dx += 22) {
-          if (dx > runnerX + 8) {
-            bannerCtx.fillRect(dx, cy - 2, 4, 4);
-          }
-        }
-
-        // Survivor sprite
-        bannerCtx.fillStyle = '#facc15';
-        bannerCtx.fillRect(runnerX - 7, cy - 7, 14, 14);
-
-        // Chasing 8-bit Ghost Drone
-        bannerCtx.fillStyle = '#f43f5e';
-        bannerCtx.beginPath();
-        bannerCtx.arc(droneX, cy - 1, 8, Math.PI, 0);
-        bannerCtx.lineTo(droneX + 8, cy + 7);
-        bannerCtx.lineTo(droneX - 8, cy + 7);
-        bannerCtx.closePath();
-        bannerCtx.fill();
+        ctx.drawImage(offCanvas, 0, 0);
       }
 
       /* =======================================================================
-         21. CHARACTER SELECTION UI BUILDER (3 CHARACTERS, 15 STARS)
+         21. IN-GAME PLAYER & FLOOR STATISTICS MODAL ([TAB] STATUS)
          ======================================================================= */
-      function renderStarRow(label, count, isStrong, isWeak) {
-        const filled = '★'.repeat(count);
-        const empty = '☆'.repeat(5 - count);
-        const badge = isStrong
-          ? 'text-emerald-400'
-          : isWeak ? 'text-rose-400' : 'text-yellow-400';
-
-        return `
-          <div class="flex items-center justify-between text-[9px] sm:text-[10px]">
-            <span class="text-slate-300">${label}</span>
-            <span class="${badge} tracking-tighter">${filled}<span class="text-slate-600">${empty}</span></span>
-          </div>
-        `;
-      }
-
-      function renderCharacterCards() {
-        const grid = document.getElementById('char-cards-grid');
-        grid.innerHTML = '';
-
-        CHARACTERS.forEach((c) => {
-          const isSelected = gameState.selectedCharId === c.id;
-          const card = document.createElement('div');
-          card.className = `${isSelected ? 'pixel-box-gold' : 'pixel-box'} p-3 sm:p-4 rounded-lg flex flex-col justify-between gap-2.5 cursor-pointer transition-transform`;
-          card.addEventListener('click', () => {
-            audio.playUiClick();
-            gameState.selectedCharId = c.id;
-            renderCharacterCards();
-          });
-
-          const totalStars = c.stats.repair + c.stats.speed + c.stats.skill + c.stats.stamina;
-
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-8 h-8 border-2 border-black flex items-center justify-center shrink-0" style="background:${c.color}">
-                    <div class="w-5 h-2" style="background:${c.visor}"></div>
-                  </div>
-                  <div>
-                    <div class="text-xs sm:text-sm text-white">${c.name}</div>
-                    <div class="text-[8px] sm:text-[9px] text-sky-300">${c.role[settings.lang]}</div>
-                  </div>
-                </div>
-                <span class="text-[9px] px-1.5 py-0.5 bg-slate-900 border border-amber-400 text-amber-300">${totalStars}★</span>
-              </div>
-
-              <div class="bg-slate-950/90 border border-slate-800 p-2 rounded flex flex-col gap-1.5 mb-2.5">
-                ${renderStarRow(t('statRepair'), c.stats.repair, c.stats.repair === 5, c.stats.repair === 2)}
-                ${renderStarRow(t('statSpeed'), c.stats.speed, c.stats.speed === 5, c.stats.speed === 2)}
-                ${renderStarRow(t('statSkill'), c.stats.skill, c.stats.skill === 5, c.stats.skill === 2)}
-                ${renderStarRow(t('statStamina'), c.stats.stamina, c.stats.stamina === 5, c.stats.stamina === 2)}
-              </div>
-            </div>
-
-            <div class="flex flex-col gap-1.5 text-[8px] sm:text-[9px] leading-relaxed border-t border-slate-800 pt-2">
-              <div>
-                <span class="text-emerald-400">[${t('passive')}]</span>
-                <span class="text-slate-200">${c.passive[settings.lang]}</span>
-              </div>
-              <div>
-                <span class="text-violet-400">[${t('active')}: ${c.active.name[settings.lang]}]</span>
-                <span class="text-slate-200">${c.active.desc[settings.lang]}</span>
-              </div>
-            </div>
-          `;
-
-          grid.appendChild(card);
-        });
-      }
-
-      /* =======================================================================
-         22. MOBILE BUTTON POSITIONER (INTERACTIVE DRAG-AND-DROP EDITOR)
-         ======================================================================= */
-      const layoutEditor = document.getElementById('layout-editor-overlay');
-      let activeDragNode = null;
-      let dragOffset = { x: 0, y: 0 };
-
-      function syncEditorNodesFromSettings() {
-        applyMobileLayout();
-        const pairs = [
-          ['joy', 'drag-joy'],
-          ['interact', 'drag-interact'],
-          ['sprint', 'drag-sprint'],
-          ['skill', 'drag-skill']
-        ];
-        for (const [key, domId] of pairs) {
-          const el = document.getElementById(domId);
-          el.style.left = `${settings.mobileLayout[key].x}px`;
-          el.style.top = `${settings.mobileLayout[key].y}px`;
-        }
-      }
-
-      ['drag-joy', 'drag-interact', 'drag-sprint', 'drag-skill'].forEach((domId) => {
-        const el = document.getElementById(domId);
-        el.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          activeDragNode = el;
-          const rect = el.getBoundingClientRect();
-          dragOffset.x = e.clientX - rect.left;
-          dragOffset.y = e.clientY - rect.top;
-        });
-      });
-
-      window.addEventListener('pointermove', (e) => {
-        if (!activeDragNode) return;
-        const key = activeDragNode.dataset.control;
-        const clamped = clampControlPos(key, e.clientX - dragOffset.x, e.clientY - dragOffset.y);
-        settings.mobileLayout[key] = clamped;
-        activeDragNode.style.left = `${clamped.x}px`;
-        activeDragNode.style.top = `${clamped.y}px`;
-      });
-
-      window.addEventListener('pointerup', () => {
-        if (activeDragNode) {
-          activeDragNode = null;
-          saveSettings();
-        }
-      });
-
-      document.getElementById('btn-open-layout-editor').addEventListener('click', () => {
-        audio.playUiClick();
-        syncEditorNodesFromSettings();
-        layoutEditor.classList.remove('hidden');
-      });
-
-      document.getElementById('btn-layout-left').addEventListener('click', () => {
-        audio.playUiClick();
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        settings.mobileLayout = {
-          joy: clampControlPos('joy', w - 138, h - 144),
-          interact: clampControlPos('interact', 24, h - 106),
-          sprint: clampControlPos('sprint', 104, h - 84),
-          skill: clampControlPos('skill', 26, h - 184)
-        };
-        syncEditorNodesFromSettings();
-        saveSettings();
-      });
-
-      document.getElementById('btn-layout-reset').addEventListener('click', () => {
-        audio.playUiClick();
-        settings.mobileLayout = defaultMobileLayout();
-        syncEditorNodesFromSettings();
-        saveSettings();
-      });
-
-      document.getElementById('btn-layout-save').addEventListener('click', () => {
-        audio.playUiClick();
-        applyMobileLayout();
-        saveSettings();
-        layoutEditor.classList.add('hidden');
-      });
-
-      /* =======================================================================
-         23. NAVIGATION, OPTIONS & RUN START/RESET WIRING
-         ======================================================================= */
-      let modeBeforeOptions = 'MENU';
-
-      function openOptionsModal(fromActiveGame = false) {
-        audio.playUiClick();
-        modeBeforeOptions = gameState.mode;
-        if (fromActiveGame && (gameState.mode === 'PLAYING' || gameState.mode === 'MINIGAME')) {
-          gameState.mode = 'PAUSED';
-        }
-        document.getElementById('btn-opt-quit-run').classList.toggle('hidden', !fromActiveGame);
-        document.getElementById('modal-options').classList.remove('hidden');
-      }
-
-      function closeOptionsModal() {
-        audio.playUiClick();
-        saveSettings();
-        document.getElementById('modal-options').classList.add('hidden');
-        if (gameState.mode === 'PAUSED') {
-          gameState.mode = minigameState.active ? 'MINIGAME' : 'PLAYING';
-        }
-        refreshMobileControlsVisibility();
-      }
-
       function renderStatsModal() {
         const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
         const upg = gameState.upgrades;
+        const p = gameState.player;
 
-        // Character avatar & header
         document.getElementById('stats-char-avatar').style.background = charDef.color;
         document.getElementById('stats-char-visor').style.background = charDef.visor;
         document.getElementById('stats-title').textContent = `${t('statsHeader')}: ${charDef.name}`;
-        const fStr = String(gameState.floor).padStart(2, '0');
-        document.getElementById('stats-subtitle').textContent = `${t('floor')} ${fStr} • ${gameState.mapTheme.name[settings.lang]}`;
+        document.getElementById('stats-subtitle').textContent =
+          `${t('floor')} ${String(gameState.floor).padStart(2, '0')} • ${gameState.mapTheme.name[settings.lang]}`;
 
-        // Attribute calculations (Base, Card %, Final)
-        const baseRepairMult = 0.64 + charDef.stats.repair * 0.065;
+        const baseRepairRate = 2.6 + charDef.stats.repair * 0.45;
+        const baseRepairMult = baseRepairRate / 3.95;
         const finalRepairMult = baseRepairMult * upg.repairMult;
-        const repairPct = Math.round((upg.repairMult - 1) * 100);
+        const repairCardPct = Math.round((upg.repairMult - 1) * 100);
 
-        const baseWalkMult = 0.84 + charDef.stats.speed * 0.072;
-        const finalWalkMult = baseWalkMult * upg.speedMult;
-        const speedPct = Math.round((upg.speedMult - 1) * 100);
-
-        const baseSprintMult = baseWalkMult * 1.42;
-        const finalSprintMult = finalWalkMult * 1.42;
+        const statSpeedMult = 0.84 + charDef.stats.speed * 0.065;
+        const baseWalk = (BASE_PLAYER_SPEED * statSpeedMult) / 100;
+        const finalWalk = baseWalk * upg.speedMult;
+        const baseSprint = baseWalk * 1.48;
+        const finalSprint = finalWalk * 1.48;
+        const speedCardPct = Math.round((upg.speedMult - 1) * 100);
 
         const baseStamMax = 70 + charDef.stats.stamina * 13;
-        const finalStamMax = Math.round(baseStamMax * upg.staminaMaxMult);
-        const stamMaxPct = Math.round((upg.staminaMaxMult - 1) * 100);
+        const finalStamMax = p.maxStamina;
+        const stamMaxCardPct = Math.round((upg.staminaMaxMult - 1) * 100);
 
-        const baseRegen = 14 + charDef.stats.stamina * 2.2;
-        const finalRegen = baseRegen * upg.staminaRegenMult;
-        const regenPct = Math.round((upg.staminaRegenMult - 1) * 100);
+        const baseStamRegen = 14 + charDef.stats.stamina * 3.2;
+        const finalStamRegen = baseStamRegen * upg.staminaRegenMult;
+        const stamRegenCardPct = Math.round((upg.staminaRegenMult - 1) * 100);
 
-        const lightPct = Math.round((upg.lightRadiusMult - 1) * 100);
-        const finalLightPct = Math.round(upg.lightRadiusMult * 100);
+        const baseLight = 148;
+        const finalLight = Math.round(baseLight * upg.lightRadiusMult);
+        const lightCardPct = Math.round((upg.lightRadiusMult - 1) * 100);
 
-        const skillPct = Math.round((upg.skillBonusMult - 1) * 100);
-        const finalSkillBonus = Math.round((10 + 2.5 * charDef.stats.skill) * upg.skillBonusMult);
+        const skillStars = charDef.stats.skill;
+        const finalSkillBonus = Math.round((10 + 2.5 * skillStars) * upg.skillBonusMult);
+        const skillCardPct = Math.round((upg.skillBonusMult - 1) * 100);
 
         const rows = [
-          { label: t('attrRepair'), base: `${baseRepairMult.toFixed(2)}x`, pct: repairPct, final: `${finalRepairMult.toFixed(2)}x` },
-          { label: t('attrWalk'), base: `${baseWalkMult.toFixed(2)}x`, pct: speedPct, final: `${finalWalkMult.toFixed(2)}x` },
-          { label: t('attrSprint'), base: `${baseSprintMult.toFixed(2)}x`, pct: speedPct, final: `${finalSprintMult.toFixed(2)}x` },
-          { label: t('attrStamMax'), base: `${baseStamMax}`, pct: stamMaxPct, final: `${finalStamMax}` },
-          { label: t('attrStamRegen'), base: `${baseRegen.toFixed(1)}/s`, pct: regenPct, final: `${finalRegen.toFixed(1)}/s` },
-          { label: t('attrLight'), base: `100%`, pct: lightPct, final: `${finalLightPct}%` },
-          { label: t('attrSkill'), base: `${charDef.stats.skill}★`, pct: skillPct, final: `+${finalSkillBonus}%` }
+          {
+            label: t('attrRepair'),
+            base: `${baseRepairMult.toFixed(2)}x`,
+            cardPct: repairCardPct,
+            final: `${finalRepairMult.toFixed(2)}x`
+          },
+          {
+            label: t('attrWalk'),
+            base: baseWalk.toFixed(2),
+            cardPct: speedCardPct,
+            final: finalWalk.toFixed(2)
+          },
+          {
+            label: t('attrSprint'),
+            base: baseSprint.toFixed(2),
+            cardPct: speedCardPct,
+            final: finalSprint.toFixed(2)
+          },
+          {
+            label: t('attrStamMax'),
+            base: `${baseStamMax}`,
+            cardPct: stamMaxCardPct,
+            final: `${finalStamMax}`
+          },
+          {
+            label: t('attrStamRegen'),
+            base: `${baseStamRegen.toFixed(1)}/s`,
+            cardPct: stamRegenCardPct,
+            final: `${finalStamRegen.toFixed(1)}/s`
+          },
+          {
+            label: t('attrLight'),
+            base: `${baseLight}px`,
+            cardPct: lightCardPct,
+            final: `${finalLight}px`
+          },
+          {
+            label: t('attrSkill'),
+            base: `${skillStars}★`,
+            cardPct: skillCardPct,
+            final: `+${finalSkillBonus}%`
+          }
         ];
 
         const rowsContainer = document.getElementById('stats-rows-container');
         rowsContainer.innerHTML = rows.map(r => `
           <div class="grid grid-cols-12 items-center py-0.5">
             <div class="col-span-5 text-slate-200 truncate">${r.label}</div>
-            <div class="col-span-2 text-center text-slate-300">${r.base}</div>
-            <div class="col-span-2 text-center ${r.pct > 0 ? 'text-emerald-400' : 'text-slate-500'}">+${r.pct}%</div>
-            <div class="col-span-3 text-right text-yellow-400">${r.final}</div>
+            <div class="col-span-2 text-center text-slate-400">${r.base}</div>
+            <div class="col-span-2 text-center ${r.cardPct > 0 ? 'text-emerald-400' : 'text-slate-500'}">+${r.cardPct}%</div>
+            <div class="col-span-3 text-right text-slate-100">${r.final}</div>
           </div>
         `).join('');
 
-        // Active Upgrade Cards in Run
-        const cardsCount = gameState.acquiredUpgrades.length;
-        document.getElementById('stats-cards-header').textContent = `${t('activeCardsLabel')} (${cardsCount}):`;
-        const cardsListEl = document.getElementById('stats-cards-list');
-        if (cardsCount === 0) {
-          cardsListEl.innerHTML = `<span class="text-[8px] sm:text-[9px] text-slate-500">${t('noCardsYet')}</span>`;
+        const acq = gameState.acquiredUpgrades;
+        document.getElementById('stats-cards-header').textContent = `${t('activeCardsLabel')} (${acq.length}):`;
+        const cardsList = document.getElementById('stats-cards-list');
+        if (acq.length === 0) {
+          cardsList.innerHTML = `<span class="text-[8px] sm:text-[9px] text-slate-500">${t('noCardsYet')}</span>`;
         } else {
-          cardsListEl.innerHTML = gameState.acquiredUpgrades.map(u => `
-            <span class="px-2 py-1 bg-[#141008] border border-yellow-400 text-yellow-300 text-[8px] sm:text-[9px] rounded">
-              ${u.title[settings.lang]} (+${u.pct}%)
+          cardsList.innerHTML = acq.map(item => `
+            <span class="px-2.5 py-1.5 border border-yellow-400/80 bg-[#141108] text-yellow-300 text-[8px] sm:text-[9px] rounded">
+              ${item.title[settings.lang]} (+${item.pct}%)
             </span>
           `).join('');
         }
 
-        // Active Floor Drones Summary Strip
         const dronesBox = document.getElementById('stats-drones-box');
         dronesBox.innerHTML = gameState.drones.map(d => `
           <div class="flex flex-wrap items-center justify-between gap-2 text-rose-300">
-            <span class="text-rose-400 font-bold">${d.type.name[settings.lang]}</span>
-            <span>${t('patrolLbl')} ${d.type.patrolMult.toFixed(2)} • ${t('chaseLbl')} ${d.type.chaseMult.toFixed(2)} • ${t('coneLbl')} ${d.type.coneAngleDeg}°</span>
+            <span>${d.type.name[settings.lang]}:</span>
+            <span class="text-slate-200">${t('patrolLbl')} ${d.type.patrolMult.toFixed(2)} • ${t('chaseLbl')} ${d.type.chaseMult.toFixed(2)} • ${t('coneLbl')} ${d.type.coneAngleDeg}°</span>
           </div>
         `).join('');
       }
 
+      let previousModeBeforeStats = 'PLAYING';
+
       function openStatsModal() {
-        if (gameState.mode !== 'PLAYING' && gameState.mode !== 'MINIGAME') return;
-        audio.playUiClick();
+        if (!['PLAYING', 'MINIGAME'].includes(gameState.mode)) return;
+        previousModeBeforeStats = gameState.mode;
         gameState.mode = 'STATS';
+        audio.playUiClick();
         renderStatsModal();
         document.getElementById('modal-stats').classList.remove('hidden');
+        refreshMobileControlsVisibility();
       }
 
       function closeStatsModal() {
         if (gameState.mode !== 'STATS') return;
         audio.playUiClick();
         document.getElementById('modal-stats').classList.add('hidden');
-        gameState.mode = minigameState.active ? 'MINIGAME' : 'PLAYING';
+        gameState.mode = previousModeBeforeStats;
+        refreshMobileControlsVisibility();
       }
 
+      /* =======================================================================
+         22. MENU, CHARACTER CARDS, OPTIONS & LAYOUT EDITOR CONTROLLERS
+         ======================================================================= */
       function refreshMobileControlsVisibility() {
         const layer = document.getElementById('mobile-controls-layer');
-        const activePlay = ['PLAYING', 'MINIGAME'].includes(gameState.mode);
-        if (activePlay && isTouchEnabled()) {
-          applyMobileLayout();
-          layer.classList.remove('hidden');
-        } else {
-          layer.classList.add('hidden');
-        }
+        const showDuringPlay = ['PLAYING', 'MINIGAME'].includes(gameState.mode) && isTouchEnabled();
+        layer.classList.toggle('hidden', !showDuringPlay);
+        if (showDuringPlay) applyMobileLayout();
       }
 
-      function requestGameFullscreen() {
-        const docEl = document.documentElement;
-        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-          const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
-          if (req) {
-            req.call(docEl).then(() => {
-              if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock('landscape').catch(() => {});
-              }
-            }).catch(() => {});
-          }
-        }
-      }
+      function renderCharacterCards() {
+        const grid = document.getElementById('char-cards-grid');
+        grid.innerHTML = '';
 
-      function toggleGameFullscreen() {
-        if (document.fullscreenElement || document.webkitFullscreenElement) {
-          const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-          if (exit) exit.call(document).catch(() => {});
-        } else {
-          requestGameFullscreen();
-        }
-      }
+        CHARACTERS.forEach((char) => {
+          const isSelected = gameState.selectedCharId === char.id;
+          const card = document.createElement('div');
+          card.className = `${isSelected ? 'pixel-box-gold' : 'pixel-box'} p-3 sm:p-4 rounded-lg flex flex-col justify-between gap-2.5 cursor-pointer transition-transform`;
 
-      function setupStandaloneManifest() {
-        try {
-          const manifestData = {
-            name: 'Neon Extract 8-Bit',
-            short_name: 'Neon Extract',
-            start_url: window.location.href,
-            display: 'fullscreen',
-            orientation: 'landscape',
-            background_color: '#050711',
-            theme_color: '#050711'
-          };
-          const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
-          const manifestLink = document.getElementById('pwa-manifest');
-          if (manifestLink) manifestLink.href = URL.createObjectURL(blob);
-        } catch (e) {}
+          const makeStars = (val) => '★'.repeat(val) + '<span class="text-slate-600">' + '☆'.repeat(5 - val) + '</span>';
+
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center gap-3 mb-2.5">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 border-2 border-black flex items-center justify-center shrink-0" style="background:${char.color};">
+                  <div class="w-6 h-2.5" style="background:${char.visor};"></div>
+                </div>
+                <div>
+                  <div class="text-xs sm:text-sm text-yellow-400">${char.name}</div>
+                  <div class="text-[8px] sm:text-[9px] text-sky-300 mt-0.5">${char.role[settings.lang]}</div>
+                </div>
+              </div>
+
+              <div class="bg-slate-950/90 border border-slate-800 p-2 rounded flex flex-col gap-1.5 text-[8px] sm:text-[9px]">
+                <div class="flex justify-between"><span>${t('statRepair')}</span><span class="text-amber-400">${makeStars(char.stats.repair)}</span></div>
+                <div class="flex justify-between"><span>${t('statSpeed')}</span><span class="text-emerald-400">${makeStars(char.stats.speed)}</span></div>
+                <div class="flex justify-between"><span>${t('statSkill')}</span><span class="text-sky-400">${makeStars(char.stats.skill)}</span></div>
+                <div class="flex justify-between"><span>${t('statStamina')}</span><span class="text-rose-400">${makeStars(char.stats.stamina)}</span></div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5 text-[8px] leading-relaxed">
+              <div class="bg-sky-950/60 border border-sky-700/70 p-2 rounded">
+                <span class="text-sky-300 block mb-0.5">${t('passive')}:</span>
+                <span class="text-slate-200">${char.passive[settings.lang]}</span>
+              </div>
+              <div class="bg-violet-950/60 border border-violet-700/70 p-2 rounded">
+                <span class="text-violet-300 block mb-0.5">${t('active')} — ${char.active.name[settings.lang]}:</span>
+                <span class="text-slate-200">${char.active.desc[settings.lang]}</span>
+              </div>
+            </div>
+          `;
+
+          card.addEventListener('click', () => {
+            audio.playUiClick();
+            gameState.selectedCharId = char.id;
+            renderCharacterCards();
+          });
+
+          grid.appendChild(card);
+        });
       }
 
       function startNewRun() {
-        if (isTouchEnabled()) requestGameFullscreen();
+        audio.ensureContext();
         audio.playUiClick();
+
+        const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
+        gameState.floor = 1;
         gameState.totalMachinesRepaired = 0;
         gameState.acquiredUpgrades = [];
         gameState.upgrades = {
@@ -3969,14 +3754,16 @@
           skillBonusMult: 1,
           lightRadiusMult: 1
         };
-        gameState.player.hearts = 3;
-        gameState.player.skillCooldown = 0;
-        gameState.player.speedBuffTimer = 0;
-        gameState.player.speedBuffMult = 1;
-        gameState.player.overclockTimer = 0;
-        gameState.player.infiniteStaminaTimer = 0;
 
-        document.getElementById('screen-main-menu').classList.add('hidden');
+        const p = gameState.player;
+        p.hearts = 3;
+        p.maxHearts = 3;
+        p.skillCooldown = 0;
+        p.speedBuffTimer = 0;
+        p.speedBuffMult = 1;
+        p.overclockTimer = 0;
+        p.infiniteStaminaTimer = 0;
+
         document.getElementById('screen-char-select').classList.add('hidden');
         document.getElementById('screen-gameover').classList.add('hidden');
         document.getElementById('hud-overlay').classList.remove('hidden');
@@ -3986,168 +3773,406 @@
         refreshMobileControlsVisibility();
       }
 
+      function triggerGameOver() {
+        gameState.mode = 'GAMEOVER';
+        cancelRepair();
+        refreshMobileControlsVisibility();
+
+        const charDef = CHARACTERS.find(c => c.id === gameState.selectedCharId) || CHARACTERS[0];
+        document.getElementById('val-go-floor').textContent = String(gameState.floor).padStart(2, '0');
+        document.getElementById('val-go-mach').textContent = String(gameState.totalMachinesRepaired);
+        document.getElementById('val-go-char').textContent = charDef.name;
+        document.getElementById('screen-gameover').classList.remove('hidden');
+      }
+
       function returnToMainMenu() {
         audio.playUiClick();
         cancelRepair();
         gameState.mode = 'MENU';
         document.getElementById('hud-overlay').classList.add('hidden');
-        document.getElementById('mobile-controls-layer').classList.add('hidden');
+        document.getElementById('hud-prompt').classList.add('hidden');
         document.getElementById('screen-char-select').classList.add('hidden');
         document.getElementById('screen-gameover').classList.add('hidden');
+        document.getElementById('screen-upgrades').classList.add('hidden');
         document.getElementById('modal-options').classList.add('hidden');
         document.getElementById('modal-stats').classList.add('hidden');
         document.getElementById('screen-main-menu').classList.remove('hidden');
+        refreshMobileControlsVisibility();
       }
 
       // Main Menu Buttons
       document.getElementById('btn-menu-start').addEventListener('click', () => {
-        if (isTouchEnabled()) requestGameFullscreen();
         audio.ensureContext();
         audio.playUiClick();
-        gameState.mode = 'CHAR_SELECT';
         document.getElementById('screen-main-menu').classList.add('hidden');
-        renderCharacterCards();
         document.getElementById('screen-char-select').classList.remove('hidden');
+        gameState.mode = 'CHAR_SELECT';
+        renderCharacterCards();
       });
 
       document.getElementById('btn-menu-options').addEventListener('click', () => {
         audio.ensureContext();
+        audio.playUiClick();
         openOptionsModal(false);
       });
 
-      // Character Select Buttons
       document.getElementById('btn-char-back').addEventListener('click', () => {
         audio.playUiClick();
-        gameState.mode = 'MENU';
         document.getElementById('screen-char-select').classList.add('hidden');
         document.getElementById('screen-main-menu').classList.remove('hidden');
+        gameState.mode = 'MENU';
       });
 
       document.getElementById('btn-char-deploy').addEventListener('click', startNewRun);
 
-      // In-Game Pause / Options, Fullscreen, Stats & Skill Buttons
-      document.getElementById('hud-pause-btn').addEventListener('click', () => openOptionsModal(true));
-      document.getElementById('hud-fullscreen-btn').addEventListener('click', () => {
-        audio.playUiClick();
-        toggleGameFullscreen();
-      });
-      document.getElementById('btn-toggle-fullscreen').addEventListener('click', () => {
-        audio.playUiClick();
-        toggleGameFullscreen();
-      });
-      document.getElementById('hud-stats-btn').addEventListener('click', openStatsModal);
-      document.getElementById('btn-stats-close').addEventListener('click', closeStatsModal);
-      document.getElementById('hud-skill-btn').addEventListener('click', triggerActiveAbility);
-
       // Options Modal Controls
+      let previousModeBeforeOptions = 'MENU';
+
+      function openOptionsModal(fromInGame) {
+        previousModeBeforeOptions = fromInGame ? 'PLAYING' : 'MENU';
+        if (fromInGame) gameState.mode = 'PAUSED';
+        document.getElementById('btn-opt-quit-run').classList.toggle('hidden', !fromInGame);
+        document.getElementById('modal-options').classList.remove('hidden');
+      }
+
+      function closeOptionsModal() {
+        audio.playUiClick();
+        saveSettings();
+        document.getElementById('modal-options').classList.add('hidden');
+        if (previousModeBeforeOptions === 'PLAYING') {
+          gameState.mode = 'PLAYING';
+        }
+        refreshMobileControlsVisibility();
+      }
+
+      document.getElementById('hud-pause-btn').addEventListener('click', () => {
+        if (gameState.mode === 'PLAYING') {
+          audio.playUiClick();
+          openOptionsModal(true);
+        }
+      });
+
+      document.getElementById('hud-stats-btn').addEventListener('click', () => {
+        if (gameState.mode === 'STATS') {
+          closeStatsModal();
+        } else {
+          openStatsModal();
+        }
+      });
+
+      document.getElementById('btn-stats-close').addEventListener('click', closeStatsModal);
+
+      document.getElementById('hud-skill-btn').addEventListener('click', () => {
+        triggerActiveAbility();
+      });
+
       document.getElementById('btn-opt-close').addEventListener('click', closeOptionsModal);
       document.getElementById('btn-opt-done').addEventListener('click', closeOptionsModal);
       document.getElementById('btn-opt-quit-run').addEventListener('click', returnToMainMenu);
 
       document.getElementById('slider-volume').addEventListener('input', (e) => {
-        settings.volume = Number(e.target.value) / 100;
-        audio.setVolume(settings.volume);
-        document.getElementById('lbl-opt-vol-val').textContent = `${e.target.value}%`;
-      });
-      document.getElementById('slider-volume').addEventListener('change', () => {
-        audio.playUiClick();
-        saveSettings();
+        const val = Number(e.target.value) / 100;
+        settings.volume = val;
+        audio.setVolume(val);
+        document.getElementById('lbl-opt-vol-val').textContent = `${Math.round(val * 100)}%`;
       });
 
       document.getElementById('btn-vol-down').addEventListener('click', () => {
         settings.volume = Math.max(0, Math.round((settings.volume - 0.1) * 10) / 10);
         audio.setVolume(settings.volume);
-        updateAllTexts();
         audio.playUiClick();
-        saveSettings();
+        updateAllTexts();
       });
 
       document.getElementById('btn-vol-up').addEventListener('click', () => {
         settings.volume = Math.min(1, Math.round((settings.volume + 0.1) * 10) / 10);
         audio.setVolume(settings.volume);
-        updateAllTexts();
         audio.playUiClick();
+        updateAllTexts();
+      });
+
+      function setFovExtraPct(pct) {
+        const clampedPct = Math.max(0, Math.min(50, Math.round(pct)));
+        settings.fovExtra = clampedPct / 100;
+        updateAllTexts();
         saveSettings();
+        if (['PLAYING', 'PAUSED', 'MINIGAME'].includes(gameState.mode)) {
+          updateCamera(0, true);
+        }
+      }
+
+      document.getElementById('slider-fov').addEventListener('input', (e) => {
+        setFovExtraPct(Number(e.target.value));
+      });
+
+      document.getElementById('btn-fov-down').addEventListener('click', () => {
+        audio.playUiClick();
+        setFovExtraPct(Math.round(settings.fovExtra * 100) - 5);
+      });
+
+      document.getElementById('btn-fov-up').addEventListener('click', () => {
+        audio.playUiClick();
+        setFovExtraPct(Math.round(settings.fovExtra * 100) + 5);
       });
 
       document.getElementById('btn-lang-pt').addEventListener('click', () => {
         settings.lang = 'pt';
-        updateAllTexts();
         audio.playUiClick();
+        updateAllTexts();
         saveSettings();
       });
 
       document.getElementById('btn-lang-en').addEventListener('click', () => {
         settings.lang = 'en';
-        updateAllTexts();
         audio.playUiClick();
+        updateAllTexts();
         saveSettings();
       });
 
       document.getElementById('btn-toggle-touch').addEventListener('click', () => {
         const order = ['auto', 'on', 'off'];
-        settings.touchMode = order[(order.indexOf(settings.touchMode) + 1) % order.length];
-        updateAllTexts();
+        const next = order[(order.indexOf(settings.touchMode) + 1) % order.length];
+        settings.touchMode = next;
         audio.playUiClick();
+        updateAllTexts();
+        refreshMobileControlsVisibility();
         saveSettings();
       });
 
-      // Game Over Buttons
+      // Fullscreen API helpers to hide browser search bar on mobile/desktop
+      function toggleFullscreenMode() {
+        const docEl = document.documentElement;
+        const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+        if (!isFs) {
+          const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+          if (req) {
+            req.call(docEl).catch(() => {});
+          }
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(() => {});
+          }
+        } else {
+          const exit = document.exitFullscreen || document.webkitExitFullscreen;
+          if (exit) {
+            exit.call(document).catch(() => {});
+          }
+        }
+      }
+
+      document.getElementById('hud-fullscreen-btn').addEventListener('click', () => {
+        audio.playUiClick();
+        toggleFullscreenMode();
+      });
+
+      document.getElementById('btn-toggle-fullscreen').addEventListener('click', () => {
+        audio.playUiClick();
+        toggleFullscreenMode();
+      });
+
+      // Automatically request fullscreen on first mobile touch gesture to hide browser search bar
+      window.addEventListener('touchstart', () => {
+        if (isTouchEnabled() && !document.fullscreenElement && !document.webkitFullscreenElement) {
+          const docEl = document.documentElement;
+          const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+          if (req) {
+            req.call(docEl).catch(() => {});
+          }
+        }
+      }, { passive: true });
+
+      // Inject standalone Web App Manifest dynamically so "Add to Home Screen" runs full-bleed without search bar
+      (function attachStandaloneManifest() {
+        try {
+          const manifest = {
+            name: 'Neon Extract 8-Bit',
+            short_name: 'Neon Extract',
+            start_url: '.',
+            display: 'fullscreen',
+            orientation: 'any',
+            background_color: '#050711',
+            theme_color: '#050711'
+          };
+          const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+          const manifestLink = document.getElementById('pwa-manifest');
+          if (manifestLink) manifestLink.href = URL.createObjectURL(blob);
+        } catch (e) {}
+      })();
+
+      // Game Over buttons
       document.getElementById('btn-go-retry').addEventListener('click', startNewRun);
       document.getElementById('btn-go-menu').addEventListener('click', returnToMainMenu);
 
       /* =======================================================================
-         24. RESPONSIVE CANVAS RESIZING & MAIN ANIMATION LOOP
+         23. DRAG-AND-DROP MOBILE BUTTON POSITION CUSTOMIZER
          ======================================================================= */
-      function resizeCanvases() {
+      const editorOverlay = document.getElementById('layout-editor-overlay');
+      const dragNodes = {
+        joy: document.getElementById('drag-joy'),
+        interact: document.getElementById('drag-interact'),
+        sprint: document.getElementById('drag-sprint'),
+        skill: document.getElementById('drag-skill')
+      };
+
+      function syncEditorNodes() {
+        if (!settings.mobileLayout) settings.mobileLayout = defaultMobileLayout();
+        for (const [key, node] of Object.entries(dragNodes)) {
+          const pos = clampControlPos(key, settings.mobileLayout[key].x, settings.mobileLayout[key].y);
+          settings.mobileLayout[key] = pos;
+          node.style.left = `${pos.x}px`;
+          node.style.top = `${pos.y}px`;
+        }
+      }
+
+      document.getElementById('btn-open-layout-editor').addEventListener('click', () => {
+        audio.playUiClick();
+        syncEditorNodes();
+        editorOverlay.classList.remove('hidden');
+      });
+
+      document.getElementById('btn-layout-save').addEventListener('click', () => {
+        audio.playUiClick();
+        saveSettings();
+        applyMobileLayout();
+        editorOverlay.classList.add('hidden');
+      });
+
+      document.getElementById('btn-layout-reset').addEventListener('click', () => {
+        audio.playUiClick();
+        settings.mobileLayout = defaultMobileLayout();
+        syncEditorNodes();
+      });
+
+      document.getElementById('btn-layout-left').addEventListener('click', () => {
+        audio.playUiClick();
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        settings.mobileLayout = {
+          joy: { x: Math.max(20, w - 138), y: Math.max(80, h - 144) },
+          interact: { x: 24, y: Math.max(80, h - 106) },
+          sprint: { x: 102, y: Math.max(80, h - 84) },
+          skill: { x: 28, y: Math.max(80, h - 184) }
+        };
+        syncEditorNodes();
+      });
+
+      // Pointer dragging for all 4 mobile controls in editor
+      let activeDragKey = null;
+      let dragOffsetX = 0;
+      let dragOffsetY = 0;
+
+      Object.entries(dragNodes).forEach(([key, node]) => {
+        node.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          activeDragKey = key;
+          const rect = node.getBoundingClientRect();
+          dragOffsetX = e.clientX - rect.left;
+          dragOffsetY = e.clientY - rect.top;
+          node.setPointerCapture(e.pointerId);
+        });
+
+        node.addEventListener('pointermove', (e) => {
+          if (activeDragKey !== key) return;
+          const clamped = clampControlPos(key, e.clientX - dragOffsetX, e.clientY - dragOffsetY);
+          settings.mobileLayout[key] = clamped;
+          node.style.left = `${clamped.x}px`;
+          node.style.top = `${clamped.y}px`;
+        });
+
+        node.addEventListener('pointerup', () => {
+          activeDragKey = null;
+        });
+      });
+
+      /* =======================================================================
+         24. RESPONSIVE CANVAS RESIZING & ANIMATED MENU BANNER STRIP
+         ======================================================================= */
+      function resizeAllCanvases() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        resizeMinigameCanvas();
 
-        const bRect = bannerCanvas.getBoundingClientRect();
-        if (bRect.width > 0 && bRect.height > 0) {
-          bannerCanvas.width = Math.floor(bRect.width);
-          bannerCanvas.height = Math.floor(bRect.height);
+        if (bannerCanvas) {
+          const rect = bannerCanvas.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            bannerCanvas.width = Math.round(rect.width);
+            bannerCanvas.height = Math.round(rect.height);
+          }
         }
 
-        resizeMinigameCanvas();
         applyMobileLayout();
+        if (gameState.mode === 'PLAYING' || gameState.mode === 'MINIGAME') {
+          updateCamera(0, true);
+        }
       }
 
       function resizeMinigameCanvas() {
         const rect = mgCanvas.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
-          mgCanvas.width = Math.floor(rect.width);
-          mgCanvas.height = Math.floor(rect.height);
+          mgCanvas.width = Math.round(rect.width);
+          mgCanvas.height = Math.round(rect.height);
         }
       }
 
-      window.addEventListener('resize', resizeCanvases);
+      window.addEventListener('resize', resizeAllCanvases);
 
+      function renderMenuBannerStrip(timeSec) {
+        if (gameState.mode !== 'MENU') return;
+        const w = bannerCanvas.width || 360;
+        const h = bannerCanvas.height || 28;
+        const cy = Math.round(h / 2);
+        bannerCtx.clearRect(0, 0, w, h);
+
+        // Pac-Man style runner & chasing 8-bit ghost across the title banner
+        const cycle = (timeSec * 68) % (w + 110);
+        const runnerX = cycle - 20;
+        const ghostX = runnerX - 46;
+
+        // Cyan energy dots ahead of the runner (eaten as the runner passes)
+        bannerCtx.fillStyle = '#38bdf8';
+        for (let px = 18; px < w - 12; px += 24) {
+          if (px > runnerX + 10) {
+            bannerCtx.fillRect(px, cy - 2, 4, 4);
+          }
+        }
+
+        // Yellow player square
+        bannerCtx.fillStyle = '#facc15';
+        bannerCtx.fillRect(Math.round(runnerX - 7), cy - 7, 14, 14);
+
+        // Pink-red Pac-Man ghost silhouette chasing behind
+        const gx = Math.round(ghostX);
+        bannerCtx.fillStyle = '#fb315b';
+        bannerCtx.beginPath();
+        bannerCtx.arc(gx, cy - 1, 7, Math.PI, 0);
+        bannerCtx.lineTo(gx + 7, cy + 7);
+        bannerCtx.lineTo(gx - 7, cy + 7);
+        bannerCtx.closePath();
+        bannerCtx.fill();
+      }
+
+      /* =======================================================================
+         25. MAIN REQUESTANIMATIONFRAME LOOP & WINDOW ONLOAD BOOTSTRAP
+         ======================================================================= */
       let lastTimestamp = 0;
-      function mainLoop(timestamp) {
+
+      function gameLoop(timestamp) {
         if (!lastTimestamp) lastTimestamp = timestamp;
         const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
         lastTimestamp = timestamp;
 
-        if (gameState.mode === 'MENU') {
-          renderBannerChase();
-        }
-
         updateSimulation(dt);
-        updateMinigame(dt);
-
-        renderGame();
+        renderWorld();
         renderMinigame();
+        renderMenuBannerStrip(timestamp / 1000);
 
-        requestAnimationFrame(mainLoop);
+        requestAnimationFrame(gameLoop);
       }
 
-      window.onload = () => {
-        setupStandaloneManifest();
+      window.onload = function () {
         loadSettings();
         updateAllTexts();
-        resizeCanvases();
-        requestAnimationFrame(mainLoop);
+        resizeAllCanvases();
+        requestAnimationFrame(gameLoop);
       };
     })();
   </script>
